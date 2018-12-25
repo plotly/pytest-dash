@@ -37,7 +37,18 @@ def wait_for_text_to_equal(driver, selector, text, timeout=10):
         driver, condition,
         timeout=timeout
     )
-    assert text == driver.find_element_by_css_selector(selector).text
+
+
+def wait_for_style_to_equal(driver, selector, style_attribute, style_assertion,
+                            timeout=10):
+    def condition(d):
+        return style_assertion == d.find_element_by_css_selector(selector)\
+            .value_of_css_property(style_attribute)
+
+    _wait_for(
+        driver, condition,
+        timeout=timeout
+    )
 
 
 def import_app(app_file):
