@@ -7,9 +7,16 @@ from selenium.webdriver.support.select import By
 from pytest_dash.errors import NoAppFoundError
 
 
-def wait_for_element_by_css_selector(driver, selector, timeout=10):
+def _wait_for(driver, condition, timeout=10):
     return WebDriverWait(driver, timeout).until(
-        EC.presence_of_element_located((By.CSS_SELECTOR, selector))
+        condition
+    )
+
+
+def wait_for_element_by_css_selector(driver, selector, timeout=10):
+    return _wait_for(
+        driver, EC.presence_of_element_located((By.CSS_SELECTOR, selector)),
+        timeout=timeout
     )
 
 
@@ -23,8 +30,12 @@ def wait_for_text_to_equal(driver, selector, text, timeout=10):
     :param timeout:
     :return:
     """
-    WebDriverWait(driver, timeout).until(
-        EC.text_to_be_present_in_element((By.CSS_SELECTOR, selector), text)
+    def condition(d):
+        return text == d.find_element_by_css_selector(selector).text
+
+    _wait_for(
+        driver, condition,
+        timeout=timeout
     )
     assert text == driver.find_element_by_css_selector(selector).text
 
