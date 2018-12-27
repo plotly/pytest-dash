@@ -1,8 +1,8 @@
 try:
-    from queue import Queue, Empty
+    from queue import Queue
 except ImportError:
     # noinspection PyUnresolvedReferences
-    from Queue import Queue, Empty
+    from Queue import Queue
 
 import pytest
 import dash
