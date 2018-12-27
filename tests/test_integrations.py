@@ -75,8 +75,8 @@ def test_no_app_found():
 
     try:
         import_app('test_apps.bad')
-    except NoAppFoundError as e:
-        error = e
+    except NoAppFoundError as err:
+        error = err
 
     assert isinstance(error, NoAppFoundError)
 
