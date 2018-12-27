@@ -10,6 +10,7 @@ from dash.dependencies import Output, Input
 from dash.exceptions import PreventUpdate
 import dash_html_components as html
 
+# pylint: disable=unused-import
 from pytest_dash.fixtures import dash_threaded, dash_subprocess
 from pytest_dash.errors import NoAppFoundError, DashAppLoadingError
 from pytest_dash.utils import \
