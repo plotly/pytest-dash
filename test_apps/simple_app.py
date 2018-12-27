@@ -1,5 +1,3 @@
-import flask
-
 import dash
 from dash.dependencies import Output, Input
 from dash.exceptions import PreventUpdate
@@ -21,7 +19,4 @@ def on_value(value):
     if value is None:
         raise PreventUpdate
 
-    # There's an issue with flask and runpy
-    # When run with `runpy.run_path`, flask will be None in the methods.
-    req = flask.request.headers
     return value
