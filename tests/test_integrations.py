@@ -1,3 +1,4 @@
+# pylint: disable=redefined-outer-name
 try:
     from queue import Queue
 except ImportError:
