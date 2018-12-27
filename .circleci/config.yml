@@ -27,6 +27,12 @@ jobs:
           key: v1-dependencies-{{ checksum "requirements.txt" }}-{{ checksum ".circleci/config.yml" }}
 
       - run:
+          name: lint
+          command: |
+            . venv/bin/activate
+            pylint pytest_dash tests test_apps
+
+      - run:
           name: run tests
           command: |
             . venv/bin/activate
