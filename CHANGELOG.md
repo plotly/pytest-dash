@@ -8,6 +8,9 @@ Versions follow [Semantic Versioning](https://www.semver.org)
 - `DashAppLoadingError` [#23](https://github.com/T4rk1n/pytest-dash/pull/23)
   - Display the body html
   - Display console logs
+  - Catch common errors early. [#33](https://github.com/T4rk1n/pytest-dash/pull/33)
+  - Loop wait_for `#_dash-app-conten`t and retry the url. [#33](https://github.com/T4rk1n/pytest-dash/pull/33)
+  - Added `start_wait_time` and `start_timeout` to `dash_threaded` [#33](https://github.com/T4rk1n/pytest-dash/pull/33)
 - Add port option to `dash_threaded` and `dash_subprocess`. [#28](https://github.com/T4rk1n/pytest-dash/pull/23)
 - Add `start_wait_time` option to `dash_threadred` for waiting after starting the thread, default to 1 sec. [#28](https://github.com/T4rk1n/pytest-dash/pull/23)
 
