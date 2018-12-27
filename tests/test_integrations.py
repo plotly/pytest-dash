@@ -74,7 +74,7 @@ def test_no_app_found():
     error = None
 
     try:
-        app = import_app('test_apps.bad')
+        import_app('test_apps.bad')
     except NoAppFoundError as e:
         error = e
 
