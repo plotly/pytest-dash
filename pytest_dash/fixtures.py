@@ -32,7 +32,7 @@ def _stop_server():
     return 'stop'
 
 
-def _wait_for_client_app_started(driver, url,  wait_time=0.5, timeout=10):
+def _wait_for_client_app_started(driver, url, wait_time=0.5, timeout=10):
     # Wait until the #_dash-app-content element is loaded.
     start_time = time.time()
     loading_errors = (
