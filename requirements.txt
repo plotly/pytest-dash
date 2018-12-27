@@ -9,3 +9,4 @@ flask
 percy
 waitress
 pylint
+flake8
