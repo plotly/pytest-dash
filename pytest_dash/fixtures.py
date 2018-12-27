@@ -8,7 +8,6 @@ import subprocess
 import shlex
 import uuid
 
-import six
 from selenium.common.exceptions import TimeoutException
 
 try:
