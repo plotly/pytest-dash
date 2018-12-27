@@ -106,9 +106,9 @@ def dash_threaded(selenium):
             app.css.config.serve_locally = True
             app.run_server(debug=False, port=port, threaded=True)
 
-        t = threading.Thread(target=run)
-        t.daemon = True
-        t.start()
+        thread = threading.Thread(target=run)
+        thread.daemon = True
+        thread.start()
         _wait_for_client_app_started(
             selenium, namespace['url'], start_wait_time, start_timeout
         )
