@@ -89,7 +89,7 @@ def dash_threaded(selenium):
     """
 
     stop_route = '/_stop-{}'.format(uuid.uuid4().hex)
-    ns = dict(
+    namespace = dict(
         port=8050,
         url='http://localhost:{}',
         started=False,
@@ -98,8 +98,8 @@ def dash_threaded(selenium):
     def create_app(app, port=8050, start_wait_time=0.5, start_timeout=10):
 
         app.server.add_url_rule(stop_route, stop_route, _stop_server)
-        ns['port'] = port
-        ns['url'] = ns['url'].format(port)
+        namespace['port'] = port
+        namespace['url'] = namespace['url'].format(port)
 
         def run():
             app.scripts.config.serve_locally = True
@@ -110,17 +110,17 @@ def dash_threaded(selenium):
         t.daemon = True
         t.start()
         _wait_for_client_app_started(
-            selenium, ns['url'], start_wait_time, start_timeout
+            selenium, namespace['url'], start_wait_time, start_timeout
         )
-        ns['started'] = True
+        namespace['started'] = True
 
         return app
 
     yield create_app
 
     # Stop the server in teardown
-    if ns['started']:
-        requests.get('{}{}'.format(ns['url'], stop_route))
+    if namespace['started']:
+        requests.get('{}{}'.format(namespace['url'], stop_route))
 
 
 @pytest.fixture
