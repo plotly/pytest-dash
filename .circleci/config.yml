@@ -31,6 +31,7 @@ jobs:
           command: |
             . venv/bin/activate
             pylint pytest_dash tests test_apps
+            flake8
 
       - run:
           name: run tests
