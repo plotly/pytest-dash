@@ -1,6 +1,7 @@
 try:
     from queue import Queue, Empty
 except ImportError:
+    # noinspection PyUnresolvedReferences
     from Queue import Queue, Empty
 
 import pytest
@@ -10,7 +11,7 @@ from dash.exceptions import PreventUpdate
 import dash_html_components as html
 
 from pytest_dash.fixtures import dash_threaded, dash_subprocess
-from pytest_dash.errors import NoAppFoundError
+from pytest_dash.errors import NoAppFoundError, DashAppLoadingError
 from pytest_dash.utils import \
     wait_for_text_to_equal, wait_for_element_by_css_selector, import_app
 
@@ -44,6 +45,14 @@ def test_dash_threaded(dash_threaded, selenium):
         wait_for_text_to_equal(selenium, '#output', str(i + 1))
 
     assert call_count.qsize() == 7
+
+
+def test_invalid_start_raises(dash_threaded):
+    app = dash.Dash(__name__)
+
+    # Start the server without setting the layout.
+    with pytest.raises(DashAppLoadingError):
+        dash_threaded(app, start_timeout=1)
 
 
 @pytest.mark.skipif('os.environ.get("CIRCLECI")',
