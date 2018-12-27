@@ -8,3 +8,4 @@ requests
 flask
 percy
 waitress
+pylint
