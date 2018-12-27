@@ -1,10 +1,12 @@
-import dash
 import flask
+
+import dash
+from dash.dependencies import Output, Input
+from dash.exceptions import PreventUpdate
 
 import dash_html_components as html
 import dash_core_components as dcc
-from dash.dependencies import Output, Input
-from dash.exceptions import PreventUpdate
+
 
 app = dash.Dash(__name__)
 
