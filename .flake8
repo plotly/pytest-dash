@@ -1,0 +1,10 @@
+[flake8]
+ignore = F811
+exclude =
+    .git,
+    venv,
+    dist,
+    .pytest_cache,
+    .circleci,
+    .idea,
+    pytest_dash.egg-info
