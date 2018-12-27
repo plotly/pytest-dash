@@ -8,11 +8,13 @@ import subprocess
 import shlex
 import uuid
 
+import six
 from selenium.common.exceptions import TimeoutException
 
 try:
     from queue import Queue, Empty
 except ImportError:
+    # noinspection PyUnresolvedReferences
     from Queue import Queue, Empty
 
 import pytest
@@ -30,19 +32,36 @@ def _stop_server():
     return 'stop'
 
 
-def _wait_for_client_app_started(driver):
+def _wait_for_client_app_started(driver, url,  wait_time=0.5, timeout=10):
     # Wait until the react-entry-point is loaded.
-    try:
-        wait_for_element_by_css_selector(driver, '#_dash-app-content')
-    except TimeoutException:
-        body = wait_for_element_by_css_selector(driver, 'body')
-        logs = driver.get_log('browser')
-        raise DashAppLoadingError(
-            'Dash could not start: \nHTML:\n {}\n\nLOGS: {}'.format(
-                body.get_property('innerHTML'),
-                pprint.pformat(logs)
+    start_time = time.time()
+    loading_errors = (
+        'error loading layout',
+        'error loading dependencies',
+        'Internal Server Error'
+    )
+    while True:
+        try:
+            driver.get(url)
+            wait_for_element_by_css_selector(
+                driver, '#_dash-app-content',
+                timeout=wait_time
             )
-        )
+            return
+        except TimeoutException:
+            body = wait_for_element_by_css_selector(driver, 'body')
+            if any(x in body.text for x in loading_errors) \
+                    or time.time() - start_time > timeout:
+
+                logs = driver.get_log('browser')
+                raise DashAppLoadingError(
+                    'Dash could not start after {}:'
+                    ' \nHTML:\n {}\n\nLOGS: {}'.format(
+                        timeout,
+                        body.get_property('innerHTML'),
+                        pprint.pformat(logs)
+                    )
+                )
 
 
 @pytest.fixture(scope='package')
@@ -72,10 +91,11 @@ def dash_threaded(selenium):
     stop_route = '/_stop-{}'.format(uuid.uuid4().hex)
     ns = dict(
         port=8050,
-        url='http://localhost:{}'
+        url='http://localhost:{}',
+        started=False,
     )
 
-    def create_app(app, port=8050, start_wait_time=1):
+    def create_app(app, port=8050, start_wait_time=0.5, start_timeout=10):
 
         app.server.add_url_rule(stop_route, stop_route, _stop_server)
         ns['port'] = port
@@ -89,16 +109,18 @@ def dash_threaded(selenium):
         t = threading.Thread(target=run)
         t.daemon = True
         t.start()
-        time.sleep(start_wait_time)
-        selenium.get(ns['url'])
-        _wait_for_client_app_started(selenium)
+        _wait_for_client_app_started(
+            selenium, ns['url'], start_wait_time, start_timeout
+        )
+        ns['started'] = True
 
         return app
 
     yield create_app
 
     # Stop the server in teardown
-    requests.get('{}{}'.format(ns['url'], stop_route))
+    if ns['started']:
+        requests.get('{}{}'.format(ns['url'], stop_route))
 
 
 @pytest.fixture
@@ -158,8 +180,8 @@ def dash_subprocess(selenium):
             print(err.decode(), file=sys.stderr)
             raise Exception('Could not start the server.')
 
-        selenium.get('http://localhost:{}/'.format(port))
-        _wait_for_client_app_started(selenium)
+        url = 'http://localhost:{}/'.format(port)
+        _wait_for_client_app_started(selenium, url)
 
     yield _sub
 
