@@ -11,10 +11,10 @@ import uuid
 from selenium.common.exceptions import TimeoutException
 
 try:
-    from queue import Queue, Empty
+    from queue import Queue
 except ImportError:
     # noinspection PyUnresolvedReferences
-    from Queue import Queue, Empty
+    from Queue import Queue
 
 import pytest
 import flask
@@ -139,8 +139,6 @@ def dash_subprocess(selenium):
         server_path = '{}:{}'.format(app_module, server_instance)
         namespace['port'] = port
 
-        status = None
-        started = False
         is_windows = sys.platform == 'win32'
 
         cmd = 'waitress-serve --listen=127.0.0.1:{} {}'.format(
@@ -162,22 +160,6 @@ def dash_subprocess(selenium):
         )
         queue_thread.daemon = True
         queue_thread.start()
-
-        while not started and status is None:
-            status = process.poll()
-            try:
-                out = namespace['queue'].get(timeout=.1)
-                out = out.decode()
-                if 'Serving on' in out:
-                    started = True
-
-            except Empty:
-                pass
-
-        if status is not None:
-            _, err = process.communicate()
-            print(err.decode(), file=sys.stderr)
-            raise Exception('Could not start the server.')
 
         url = 'http://localhost:{}/'.format(port)
         _wait_for_client_app_started(selenium, url)
