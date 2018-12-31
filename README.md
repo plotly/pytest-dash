@@ -2,6 +2,8 @@
 
 [Pytest][2] fixtures for [dash][1].
 
+[![CircleCI](https://circleci.com/gh/T4rk1n/pytest-dash.svg?style=svg)](https://circleci.com/gh/T4rk1n/pytest-dash)
+
 ## Install
 
 `$ pip install pytest-dash`
