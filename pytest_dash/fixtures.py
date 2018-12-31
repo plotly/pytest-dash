@@ -10,12 +10,6 @@ import uuid
 
 from selenium.common.exceptions import TimeoutException
 
-try:
-    from queue import Queue
-except ImportError:
-    # noinspection PyUnresolvedReferences
-    from Queue import Queue
-
 import pytest
 import flask
 import requests
