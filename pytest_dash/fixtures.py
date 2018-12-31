@@ -149,7 +149,22 @@ def dash_subprocess(selenium):
         )
 
         url = 'http://localhost:{}/'.format(port)
-        _wait_for_client_app_started(selenium, url)
+
+        try:
+            _wait_for_client_app_started(selenium, url)
+        except DashAppLoadingError:
+            status = process.poll()
+            out, err = process.communicate()
+            print(
+                '\nDash subprocess: {} Failed with status: {}'.format(
+                    cmd, status
+                )
+            )
+            if out:
+                print(out.decode(), file=sys.stderr)
+            if err:
+                print(err.decode(), file=sys.stderr)
+            raise
 
     yield _sub
 
