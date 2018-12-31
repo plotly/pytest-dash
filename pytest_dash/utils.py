@@ -39,6 +39,10 @@ def wait_for_element_by_xpath(driver, xpath, timeout=10):
     )
 
 
+def wait_for_element_by_id(driver, _id, timeout=10):
+    return _wait_for_element(driver, By.ID, _id, timeout=timeout)
+
+
 def wait_for_text_to_equal(driver, selector, text, timeout=10):
     """
 
