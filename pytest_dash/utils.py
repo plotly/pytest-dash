@@ -51,6 +51,15 @@ def wait_for_style_to_equal(driver, selector, style_attribute, style_assertion,
     )
 
 
+def wait_for_property_to_equal(driver, selector, prop_name, prop_value,
+                               timeout=10):
+    def condition(d):
+        return prop_value == d.find_element_by_css_selector(selector)\
+            .get_property(prop_name)
+
+    _wait_for(driver, condition, timeout=timeout)
+
+
 def import_app(app_file):
     try:
         app_module = runpy.run_module(app_file)
