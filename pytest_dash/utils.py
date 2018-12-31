@@ -13,16 +13,28 @@ def _wait_for(driver, condition, timeout=10):
     )
 
 
-def wait_for_element_by_css_selector(driver, selector, timeout=10):
+def _wait_for_element(driver, by, accessor, timeout=10):
     return _wait_for(
-        driver, EC.presence_of_element_located((By.CSS_SELECTOR, selector)),
+        driver,
+        EC.presence_of_element_located((by, accessor)),
+        timeout=timeout
+    )
+
+
+def wait_for_element_by_css_selector(driver, selector, timeout=10):
+    return _wait_for_element(
+        driver,
+        By.CSS_SELECTOR,
+        selector,
         timeout=timeout
     )
 
 
 def wait_for_element_by_xpath(driver, xpath, timeout=10):
-    return _wait_for(
-        driver, EC.presence_of_element_located((By.XPATH, xpath)),
+    return _wait_for_element(
+        driver,
+        By.XPATH,
+        xpath,
         timeout=timeout
     )
 
