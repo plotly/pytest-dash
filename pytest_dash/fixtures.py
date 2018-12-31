@@ -126,14 +126,8 @@ def dash_threaded(selenium):
 def dash_subprocess(selenium):
     namespace = {
         'process': None,
-        'queue': Queue(),
         'port': 8050
     }
-
-    def _enqueue(out):
-        for line in iter(out.readline, b''):
-            namespace['queue'].put(line)
-        out.close()
 
     def _sub(app_module, server_instance='app.server', port=8050):
         server_path = '{}:{}'.format(app_module, server_instance)
@@ -148,18 +142,11 @@ def dash_subprocess(selenium):
         line = shlex.split(cmd, posix=not is_windows)
 
         # noinspection PyTypeChecker
-        process = namespace['process'] = \
-            subprocess.Popen(line,
-                             bufsize=1,
-                             stdout=subprocess.PIPE,
-                             stderr=subprocess.PIPE)
-
-        queue_thread = threading.Thread(
-            target=_enqueue,
-            args=(process.stdout,),
+        process = namespace['process'] = subprocess.Popen(
+            line,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE
         )
-        queue_thread.daemon = True
-        queue_thread.start()
 
         url = 'http://localhost:{}/'.format(port)
         _wait_for_client_app_started(selenium, url)
