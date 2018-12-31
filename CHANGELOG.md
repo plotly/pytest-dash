@@ -11,8 +11,12 @@ Versions follow [Semantic Versioning](https://www.semver.org)
   - Catch common errors early. [#33](https://github.com/T4rk1n/pytest-dash/pull/33)
   - Loop wait_for `#_dash-app-conten`t and retry the url. [#33](https://github.com/T4rk1n/pytest-dash/pull/33)
   - Added `start_wait_time` and `start_timeout` to `dash_threaded` [#33](https://github.com/T4rk1n/pytest-dash/pull/33)
-- Add port option to `dash_threaded` and `dash_subprocess`. [#28](https://github.com/T4rk1n/pytest-dash/pull/23)
-- Add `start_wait_time` option to `dash_threadred` for waiting after starting the thread, default to 1 sec. [#28](https://github.com/T4rk1n/pytest-dash/pull/23)
+- Add port option to `dash_threaded` and `dash_subprocess`. [#28](https://github.com/T4rk1n/pytest-dash/pull/28)
+- Add `start_wait_time` option to `dash_threadred` for waiting after starting the thread, default to 1 sec. [#28](https://github.com/T4rk1n/pytest-dash/pull/28)
+- Add more `wait_for` wrappers [#41](https://github.com/T4rk1n/pytest-dash/pull/41)
+  - `wait_for_style_to_equal`
+  - `wait_for_property_to_equal`
+  - `wait_for_element_by_*`
 
 ## [1.0.1] 2018-12-05
 ### Fixed
