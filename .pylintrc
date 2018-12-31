@@ -400,6 +400,10 @@ good-names=i,
            k,
            ex,
            Run,
+           d,
+           x,
+           y,
+           by,
            _
 
 # Include a hint for the correct naming format with invalid-name.
