@@ -17,6 +17,9 @@ Versions follow [Semantic Versioning](https://www.semver.org)
   - `wait_for_style_to_equal`
   - `wait_for_property_to_equal`
   - `wait_for_element_by_*`
+  
+### Fixed
+- `dash_subprocess` uses `_wait_for_client_app_started` instead of polling the output, fix subprocess tests on circle #13, [#43](https://github.com/T4rk1n/pytest-dash/pull/43)
 
 ## [1.0.1] 2018-12-05
 ### Fixed
