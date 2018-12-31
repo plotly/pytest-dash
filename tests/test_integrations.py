@@ -81,8 +81,6 @@ def test_no_app_found():
     assert isinstance(error, NoAppFoundError)
 
 
-@pytest.mark.skipif('os.environ.get("CIRCLECI")',
-                    reason='Not working on circle.')
 def test_subprocess(dash_subprocess, selenium):
     dash_subprocess('test_apps.simple_app', port=8080)
     assert 'http://localhost:8080' in selenium.current_url
