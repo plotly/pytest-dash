@@ -2,14 +2,14 @@
 
 Versions follow [Semantic Versioning](https://www.semver.org)
 
-## [UNRELEASED] 2018-12-24
+## [1.1.0] 2019-01-01
 ### Added
 - Base exception type: `PytestDashError` [#23](https://github.com/T4rk1n/pytest-dash/pull/23)
 - `DashAppLoadingError` [#23](https://github.com/T4rk1n/pytest-dash/pull/23)
   - Display the body html
   - Display console logs
   - Catch common errors early. [#33](https://github.com/T4rk1n/pytest-dash/pull/33)
-  - Loop wait_for `#_dash-app-conten`t and retry the url. [#33](https://github.com/T4rk1n/pytest-dash/pull/33)
+  - Loop wait_for `#_dash-app-content` and retry the url. [#33](https://github.com/T4rk1n/pytest-dash/pull/33)
   - Added `start_wait_time` and `start_timeout` to `dash_threaded` [#33](https://github.com/T4rk1n/pytest-dash/pull/33)
 - Add port option to `dash_threaded` and `dash_subprocess`. [#28](https://github.com/T4rk1n/pytest-dash/pull/28)
 - Add `start_wait_time` option to `dash_threadred` for waiting after starting the thread, default to 1 sec. [#28](https://github.com/T4rk1n/pytest-dash/pull/28)
@@ -17,7 +17,7 @@ Versions follow [Semantic Versioning](https://www.semver.org)
   - `wait_for_style_to_equal`
   - `wait_for_property_to_equal`
   - `wait_for_element_by_*`
-  
+
 ### Fixed
 - `dash_subprocess` uses `_wait_for_client_app_started` instead of polling the output, fix subprocess tests on circle #13, [#43](https://github.com/T4rk1n/pytest-dash/pull/43)
 
