@@ -11,3 +11,4 @@ waitress
 pylint
 flake8
 sphinx
+yapf
