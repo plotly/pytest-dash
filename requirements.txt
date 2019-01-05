@@ -10,3 +10,4 @@ percy
 waitress
 pylint
 flake8
+sphinx
