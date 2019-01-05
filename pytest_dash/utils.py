@@ -51,7 +51,7 @@ def wait_for_text_to_equal(driver, selector, text, timeout=10):
 
 
 def wait_for_style_to_equal(
-    driver, selector, style_attribute, style_assertion, timeout=10
+        driver, selector, style_attribute, style_assertion, timeout=10
 ):
     def condition(d):
         return style_assertion == d.find_element_by_css_selector(selector)\
@@ -61,7 +61,7 @@ def wait_for_style_to_equal(
 
 
 def wait_for_property_to_equal(
-    driver, selector, prop_name, prop_value, timeout=10
+        driver, selector, prop_name, prop_value, timeout=10
 ):
     def condition(d):
         return prop_value == d.find_element_by_css_selector(selector)\
