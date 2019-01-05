@@ -31,14 +31,13 @@ def _wait_for_client_app_started(driver, url, wait_time=0.5, timeout=10):
     loading_errors = (
         'error loading layout',
         'error loading dependencies',
-        'Internal Server Error'
+        'Internal Server Error',
     )
     while True:
         try:
             driver.get(url)
             wait_for_element_by_css_selector(
-                driver, '#_dash-app-content',
-                timeout=wait_time
+                driver, '#_dash-app-content', timeout=wait_time
             )
             return
         except TimeoutException:
@@ -50,8 +49,7 @@ def _wait_for_client_app_started(driver, url, wait_time=0.5, timeout=10):
                 raise DashAppLoadingError(
                     'Dash could not start after {}:'
                     ' \nHTML:\n {}\n\nLOGS: {}'.format(
-                        timeout,
-                        body.get_property('innerHTML'),
+                        timeout, body.get_property('innerHTML'),
                         pprint.pformat(logs)
                     )
                 )
@@ -118,10 +116,7 @@ def dash_threaded(selenium):
 
 @pytest.fixture
 def dash_subprocess(selenium):
-    namespace = {
-        'process': None,
-        'port': 8050
-    }
+    namespace = {'process': None, 'port': 8050}
 
     def _sub(app_module, server_instance='app.server', port=8050):
         server_path = '{}:{}'.format(app_module, server_instance)
@@ -130,16 +125,13 @@ def dash_subprocess(selenium):
         is_windows = sys.platform == 'win32'
 
         cmd = 'waitress-serve --listen=127.0.0.1:{} {}'.format(
-            port,
-            server_path
+            port, server_path
         )
         line = shlex.split(cmd, posix=not is_windows)
 
         # noinspection PyTypeChecker
         process = namespace['process'] = subprocess.Popen(
-            line,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE
+            line, stdout=subprocess.PIPE, stderr=subprocess.PIPE
         )
 
         url = 'http://localhost:{}/'.format(port)

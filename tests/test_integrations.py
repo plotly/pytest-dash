@@ -12,7 +12,7 @@ from dash.exceptions import PreventUpdate
 import dash_html_components as html
 
 # pylint: disable=unused-import
-from pytest_dash.fixtures import dash_threaded, dash_subprocess # noqa F401
+from pytest_dash.fixtures import dash_threaded, dash_subprocess  # noqa F401
 from pytest_dash.errors import NoAppFoundError, DashAppLoadingError
 from pytest_dash.utils import \
     wait_for_text_to_equal, wait_for_element_by_css_selector, import_app
@@ -28,8 +28,7 @@ def test_dash_threaded(dash_threaded, selenium):
 
     call_count = Queue()
 
-    @app.callback(Output('output', 'children'),
-                  [Input('clicker', 'n_clicks')])
+    @app.callback(Output('output', 'children'), [Input('clicker', 'n_clicks')])
     def on_click(n_clicks):
         call_count.put(1)
         if n_clicks is None:
@@ -57,8 +56,9 @@ def test_invalid_start_raises(dash_threaded):
         dash_threaded(app, start_timeout=1)
 
 
-@pytest.mark.skipif('os.environ.get("CIRCLECI")',
-                    reason='Bugged because of #15')
+@pytest.mark.skipif(
+    'os.environ.get("CIRCLECI")', reason='Bugged because of #15'
+)
 def test_imported_app(dash_threaded, selenium):
     app = import_app('test_apps.simple_app')
     dash_threaded(app)
