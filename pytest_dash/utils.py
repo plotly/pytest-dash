@@ -7,11 +7,11 @@ from selenium.webdriver.support.select import By
 from pytest_dash.errors import NoAppFoundError
 
 
-def _wait_for(driver, condition, timeout=10):
+def _wait_for(driver, condition, timeout=10.0):
     return WebDriverWait(driver, timeout).until(condition)
 
 
-def _wait_for_element(driver, by, accessor, timeout=10):
+def _wait_for_element(driver, by, accessor, timeout=10.0):
     return _wait_for(
         driver,
         EC.presence_of_element_located((by, accessor)),
@@ -19,17 +19,54 @@ def _wait_for_element(driver, by, accessor, timeout=10):
     )
 
 
-def wait_for_element_by_css_selector(driver, selector, timeout=10):
+def wait_for_element_by_css_selector(driver, selector, timeout=10.0):
+    """
+    Wait until a single element is found and return it.
+    This variant use the css selector api:
+    https://www.w3schools.com/jsref/met_document_queryselector.asp
+
+    :param driver: Selenium driver
+    :type driver: selenium.webdriver.remote.webdriver.WebDriver
+    :param selector: CSS selector to find.
+    :type selector: str
+    :param timeout: Maximum time to find the element.
+    :type timeout: float
+    :return:
+    """
     return _wait_for_element(
         driver, By.CSS_SELECTOR, selector, timeout=timeout
     )
 
 
 def wait_for_element_by_xpath(driver, xpath, timeout=10):
+    """
+    Wait until a single element is found and return it.
+    This variant use xpath to find the element.
+    https://www.w3schools.com/xml/xml_xpath.asp
+
+    :param driver: Selenium driver
+    :type driver: selenium.webdriver.remote.webdriver.WebDriver
+    :param xpath: Xpath query string.
+    :type xpath: str
+    :param timeout: Maximum time to find the element.
+    :type timeout: float
+    :return:
+    """
     return _wait_for_element(driver, By.XPATH, xpath, timeout=timeout)
 
 
 def wait_for_element_by_id(driver, _id, timeout=10):
+    """
+    Wait until a single element is found and return it.
+    This variant find by id.
+
+    :param driver: Selenium driver
+    :type driver: selenium.webdriver.remote.webdriver.WebDriver
+    :param _id: The id of the element to find.
+    :param timeout: Maximum time to find the element.
+    :type timeout: float
+    :return:
+    """
     return _wait_for_element(driver, By.ID, _id, timeout=timeout)
 
 
