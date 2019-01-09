@@ -1,4 +1,7 @@
+"""Pytest-dash errors."""
+
 class PytestDashError(Exception):
+    """Base error for pytest-dash."""
     pass
 
 
