@@ -72,12 +72,16 @@ def wait_for_element_by_id(driver, _id, timeout=10):
 
 def wait_for_text_to_equal(driver, selector, text, timeout=10):
     """
+    Wait an element text found by css selector is equal to text.
 
-    :param driver:
+    :param driver: Selenium driver
     :type driver: selenium.webdriver.remote.webdriver.WebDriver
-    :param selector:
-    :param text:
-    :param timeout:
+    :param selector: Selector of the element to assert it's text property.
+    :type selector: str
+    :param text: Text to equal.
+    :type text: str
+    :param timeout: Maximum time for the text to equal.
+    :type timeout: float
     :return:
     """
 
