@@ -1,0 +1,24 @@
+SimpleCallback:
+    description: Test a dcc.Input callback output to a html.Div when a html.Button is clicked\
+    parameters:
+        - $var1:
+            description: Value to send to the input
+            type: str
+            default: hello world
+    application:
+        path: <app_path>
+        options:
+            port: 8051
+    context:
+        - #input.value is "Initial Value"
+    event:
+        - clear #input
+        - enter $var1 in #input
+        - click #btn
+    outcome:
+        - #output.text should be $var1
+
+Tests:
+        - SimpleCallback
+        - SimpleCallback:
+            $var1: foo bar
