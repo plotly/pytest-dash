@@ -116,6 +116,13 @@ def dash_threaded(selenium):
 
 @pytest.fixture
 def dash_subprocess(selenium):
+    """
+    Start a Dash server with subprocess.Popen and waitress-serve.
+    No instance is returned from this fixture.
+
+    :param selenium: A selenium fixture
+    :return:
+    """
     namespace = {'process': None, 'port': 8050}
 
     def _sub(app_module, server_instance='app.server', port=8050):
