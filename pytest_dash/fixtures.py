@@ -1,3 +1,4 @@
+"""Pytest fixtures for Dash."""
 from __future__ import print_function
 
 import pprint

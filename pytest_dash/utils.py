@@ -1,3 +1,4 @@
+"""Utils methods for pytest-dash such wait_for wrappers and import_app."""
 import runpy
 
 from selenium.webdriver.support.wait import WebDriverWait
