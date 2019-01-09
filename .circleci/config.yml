@@ -43,7 +43,6 @@ jobs:
           name: run tests
           command: |
             . venv/bin/activate
-            pip install -e .
             pytest tests --driver Chrome
 
       - store_artifacts:
