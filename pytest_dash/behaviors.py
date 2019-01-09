@@ -24,9 +24,13 @@ class DashBehaviorTestFile(pytest.File):
             else:
                 behavior_name = list(test.keys())[0]
                 behavior = raw.get(behavior_name)
+                kwargs = test[behavior_name]
+                test_name = behavior_name + '-' + '-'.join(
+                    '[{}={}]'.format(k, v) for k, v in kwargs.items()
+                )
 
                 yield DashBehaviorTestItem(
-                    behavior_name, self, behavior, **test[behavior_name]
+                    test_name, self, behavior, **kwargs
                 )
 
 
@@ -40,18 +44,8 @@ class DashBehaviorTestItem(pytest.Item):
 
     # pylint: disable=missing-docstring
     def runtest(self):
-        print(self.proper_name)
         print(self.spec)
 
     # pylint: disable=missing-docstring
     def reportinfo(self):
-        return self.fspath, 0, "usecase: %s" % self.proper_name
-
-    @property
-    def proper_name(self):
-        """Behavior name with the arguments if any."""
-        if self.parameters:
-            return self.name + '-' + '-'.join(
-                '[{}={}]'.format(k, v) for k, v in self.parameters.items()
-            )
-        return self.name
+        return self.fspath, 0, "usecase: %s" % self.name
