@@ -1,11 +1,15 @@
 import runpy
+import shlex
+import subprocess
+import time
 import uuid
 import threading
+import sys
 
 import flask
 import requests
 
-from pytest_dash.errors import NoAppFoundError
+from pytest_dash.errors import NoAppFoundError, DashAppLoadingError
 from pytest_dash.utils import _wait_for_client_app_started
 
 
@@ -98,3 +102,50 @@ class DashThreaded(BaseDashStarter):
 
     def stop(self):
         requests.get('{}{}'.format(self.url, self.stop_route))
+
+
+class DashSubprocess(BaseDashStarter):
+    def __init__(self, driver, keep_open=False):
+        super(DashSubprocess, self).__init__(driver, keep_open=keep_open)
+        self.process = None
+
+    def start(self, app_module, server_instance='app.server', port=8050):
+        server_path = '{}:{}'.format(app_module, server_instance)
+        self.port = port
+
+        is_windows = sys.platform == 'win32'
+
+        cmd = 'waitress-serve --listen=127.0.0.1:{} {}'.format(
+            port, server_path
+        )
+        line = shlex.split(cmd, posix=not is_windows)
+
+        # noinspection PyTypeChecker
+        self.process = subprocess.Popen(
+            line, stdout=subprocess.PIPE, stderr=subprocess.PIPE
+        )
+
+        url = 'http://localhost:{}/'.format(port)
+
+        try:
+            _wait_for_client_app_started(self.driver, url)
+        except DashAppLoadingError:
+            status = self.process.poll()
+            out, err = self.process.communicate()
+            print(
+                '\nDash subprocess: {} Failed with status: {}'.format(
+                    cmd, status
+                )
+            )
+            if out:
+                print(out.decode(), file=sys.stderr)
+            if err:
+                print(err.decode(), file=sys.stderr)
+            raise
+        else:
+            self.started = True
+
+    def stop(self):
+        self.process.kill()
+        while not self.process.poll():
+            time.sleep(0.01)
