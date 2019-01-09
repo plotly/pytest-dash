@@ -7,8 +7,6 @@ from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.select import By
 
-# Import the old import_app for backward compat. pylint: disable=unused-import
-from pytest_dash.application_starters import import_app  # noqa: F401
 from pytest_dash.errors import DashAppLoadingError
 
 
