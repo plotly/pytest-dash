@@ -1,11 +1,15 @@
 """Utils methods for pytest-dash such wait_for wrappers and import_app."""
+import pprint
+import time
 
+from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.select import By
 
 # Import the old import_app for backward compat. pylint: disable=unused-import
 from pytest_dash.application_starters import import_app  # noqa: F401
+from pytest_dash.errors import DashAppLoadingError
 
 
 def _wait_for(driver, condition, timeout=10.0):
@@ -141,3 +145,33 @@ def wait_for_property_to_equal(
             .get_property(prop_name)
 
     _wait_for(driver, condition, timeout=timeout)
+
+
+def _wait_for_client_app_started(driver, url, wait_time=0.5, timeout=10):
+    # Wait until the #_dash-app-content element is loaded.
+    start_time = time.time()
+    loading_errors = (
+        'error loading layout',
+        'error loading dependencies',
+        'Internal Server Error',
+    )
+    while True:
+        try:
+            driver.get(url)
+            wait_for_element_by_css_selector(
+                driver, '#_dash-app-content', timeout=wait_time
+            )
+            return
+        except TimeoutException:
+            body = wait_for_element_by_css_selector(driver, 'body')
+            if any(x in body.text for x in loading_errors) \
+                    or time.time() - start_time > timeout:
+
+                logs = driver.get_log('browser')
+                raise DashAppLoadingError(
+                    'Dash could not start after {}:'
+                    ' \nHTML:\n {}\n\nLOGS: {}'.format(
+                        timeout, body.get_property('innerHTML'),
+                        pprint.pformat(logs)
+                    )
+                )

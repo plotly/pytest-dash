@@ -1,7 +1,6 @@
 """Pytest fixtures for Dash."""
 from __future__ import print_function
 
-import pprint
 import threading
 import time
 import sys
@@ -9,51 +8,19 @@ import subprocess
 import shlex
 import uuid
 
-from selenium.common.exceptions import TimeoutException
-
 import pytest
 import flask
 import requests
 import percy
 
 from pytest_dash.errors import DashAppLoadingError
-from pytest_dash.utils import wait_for_element_by_css_selector
+from pytest_dash.utils import _wait_for_client_app_started
 
 
 def _stop_server():
     stopper = flask.request.environ['werkzeug.server.shutdown']
     stopper()
     return 'stop'
-
-
-def _wait_for_client_app_started(driver, url, wait_time=0.5, timeout=10):
-    # Wait until the #_dash-app-content element is loaded.
-    start_time = time.time()
-    loading_errors = (
-        'error loading layout',
-        'error loading dependencies',
-        'Internal Server Error',
-    )
-    while True:
-        try:
-            driver.get(url)
-            wait_for_element_by_css_selector(
-                driver, '#_dash-app-content', timeout=wait_time
-            )
-            return
-        except TimeoutException:
-            body = wait_for_element_by_css_selector(driver, 'body')
-            if any(x in body.text for x in loading_errors) \
-                    or time.time() - start_time > timeout:
-
-                logs = driver.get_log('browser')
-                raise DashAppLoadingError(
-                    'Dash could not start after {}:'
-                    ' \nHTML:\n {}\n\nLOGS: {}'.format(
-                        timeout, body.get_property('innerHTML'),
-                        pprint.pformat(logs)
-                    )
-                )
 
 
 @pytest.fixture(scope='package')
