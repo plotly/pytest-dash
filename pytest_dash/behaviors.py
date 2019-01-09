@@ -32,6 +32,7 @@ class DashBehaviorTestFile(pytest.File):
 
 class DashBehaviorTestItem(pytest.Item):
     """A single test of a test file."""
+
     def __init__(self, name, parent, spec, **kwargs):
         super(DashBehaviorTestItem, self).__init__(name, parent)
         self.spec = spec
@@ -51,8 +52,6 @@ class DashBehaviorTestItem(pytest.Item):
         """Behavior name with the arguments if any."""
         if self.parameters:
             return self.name + '-' + '-'.join(
-                '[{}={}]'.format(k, v)
-                for k, v
-                in self.parameters.items()
+                '[{}={}]'.format(k, v) for k, v in self.parameters.items()
             )
         return self.name
