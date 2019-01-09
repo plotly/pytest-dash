@@ -1,3 +1,4 @@
+# pylint: disable=missing-docstring
 import dash
 from dash.dependencies import Output, Input
 from dash.exceptions import PreventUpdate

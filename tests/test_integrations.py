@@ -1,4 +1,4 @@
-# pylint: disable=redefined-outer-name
+# pylint: disable=redefined-outer-name, missing-docstring
 try:
     from queue import Queue
 except ImportError:
