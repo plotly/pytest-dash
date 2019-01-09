@@ -58,6 +58,14 @@ def _wait_for_client_app_started(driver, url, wait_time=0.5, timeout=10):
 
 @pytest.fixture(scope='package')
 def percy_snapshot(selenium):
+    """
+    Initialize a percy build once per run.
+    Take snapshots with the fixtures.
+    Finalize the build once per run.
+
+    :param selenium: A selenium fixture.
+    :return:
+    """
     loader = percy.ResourceLoader(webdriver=selenium)
     percy_runner = percy.Runner(loader=loader)
     percy_runner.initialize_build()
