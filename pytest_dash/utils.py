@@ -110,6 +110,7 @@ def wait_for_style_to_equal(
     :type timeout: float
     :return:
     """
+
     def condition(d):
         return style_assertion == d.find_element_by_css_selector(selector)\
             .value_of_css_property(style_attribute)
@@ -134,6 +135,7 @@ def wait_for_property_to_equal(
     :type timeout: float
     :return:
     """
+
     def condition(d):
         return prop_value == d.find_element_by_css_selector(selector)\
             .get_property(prop_name)
