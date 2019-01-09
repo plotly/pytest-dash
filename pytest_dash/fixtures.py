@@ -1,20 +1,18 @@
 """Pytest fixtures for Dash."""
 from __future__ import print_function
 
-import threading
 import time
 import sys
 import subprocess
 import shlex
-import uuid
 
 import pytest
 import flask
-import requests
 import percy
 
 from pytest_dash.errors import DashAppLoadingError
 from pytest_dash.utils import _wait_for_client_app_started
+from pytest_dash.application_starters import DashThreaded
 
 
 def _stop_server():
@@ -55,39 +53,8 @@ def dash_threaded(selenium):
     :return:
     """
 
-    stop_route = '/_stop-{}'.format(uuid.uuid4().hex)
-    namespace = dict(
-        port=8050,
-        url='http://localhost:{}',
-        started=False,
-    )
-
-    def create_app(app, port=8050, start_wait_time=0.5, start_timeout=10):
-
-        app.server.add_url_rule(stop_route, stop_route, _stop_server)
-        namespace['port'] = port
-        namespace['url'] = namespace['url'].format(port)
-
-        def run():
-            app.scripts.config.serve_locally = True
-            app.css.config.serve_locally = True
-            app.run_server(debug=False, port=port, threaded=True)
-
-        thread = threading.Thread(target=run)
-        thread.daemon = True
-        thread.start()
-        _wait_for_client_app_started(
-            selenium, namespace['url'], start_wait_time, start_timeout
-        )
-        namespace['started'] = True
-
-        return app
-
-    yield create_app
-
-    # Stop the server in teardown
-    if namespace['started']:
-        requests.get('{}{}'.format(namespace['url'], stop_route))
+    with DashThreaded(selenium) as starter:
+        yield starter
 
 
 @pytest.fixture
