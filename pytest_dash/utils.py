@@ -94,6 +94,21 @@ def wait_for_text_to_equal(driver, selector, text, timeout=10):
 def wait_for_style_to_equal(
         driver, selector, style_attribute, style_assertion, timeout=10
 ):
+    """
+    Wait for an element style attribute to equal.
+
+    :param driver: Selenium driver
+    :type driver: selenium.webdriver.remote.webdriver.WebDriver
+    :param selector: Selector of the element to assert it's style property.
+    :type selector: str
+    :param style_attribute: The name of the CSS attribute to assert.
+    :type style_attribute: str
+    :param style_assertion: The value to equal of CSS attribute.
+    :type style_assertion: str
+    :param timeout: Maximum time.
+    :type timeout: float
+    :return:
+    """
     def condition(d):
         return style_assertion == d.find_element_by_css_selector(selector)\
             .value_of_css_property(style_attribute)
@@ -104,6 +119,20 @@ def wait_for_style_to_equal(
 def wait_for_property_to_equal(
         driver, selector, prop_name, prop_value, timeout=10
 ):
+    """
+    Wait for an element property to equal a value.
+
+    :param driver: Selenium driver
+    :type driver: selenium.webdriver.remote.webdriver.WebDriver
+    :param selector: Selector of the element to assert it's property.
+    :type selector: str
+    :param prop_name: The name of property.
+    :type prop_name: str
+    :param prop_value: The value to assert.
+    :param timeout: Maximum time.
+    :type timeout: float
+    :return:
+    """
     def condition(d):
         return prop_value == d.find_element_by_css_selector(selector)\
             .get_property(prop_name)
