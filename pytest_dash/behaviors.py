@@ -2,6 +2,7 @@ import pytest
 from ruamel import yaml
 
 
+# pylint: disable=inconsistent-return-statements
 def pytest_collect_file(parent, path):
     if path.ext == ".yml" and path.basename.startswith("test"):
         return DashBehaviorTestFile(path, parent)
