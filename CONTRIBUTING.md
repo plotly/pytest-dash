@@ -23,7 +23,7 @@ Auto format with [yapf](https://github.com/google/yapf):
 
 #### Commit messages
 
-Use an emoji to categorize your commits according to this list adapted from:
+Prefix your commit messages with an emoji according to this list adapted from:
 https://gist.github.com/parmentf/035de27d6ed1dce0b36a
 
 |   Commit type              | Emoji                                         |
