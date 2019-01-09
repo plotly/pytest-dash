@@ -1,11 +1,11 @@
 """Utils methods for pytest-dash such wait_for wrappers and import_app."""
-import runpy
 
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.select import By
 
-from pytest_dash.errors import NoAppFoundError
+# Import the old import_app for backward compat. pylint: disable=unused-import
+from pytest_dash.application_starters import import_app  # noqa: F401
 
 
 def _wait_for(driver, condition, timeout=10.0):
@@ -141,31 +141,3 @@ def wait_for_property_to_equal(
             .get_property(prop_name)
 
     _wait_for(driver, condition, timeout=timeout)
-
-
-def import_app(app_file):
-    """
-    Import a dash application from a module.
-    The import path is in dot notation to the module.
-    The variable named app will be returned.
-
-    *Example*
-
-        >>> app = import_app('my_app.app')
-
-    Will import the application in module `app` of the package `my_app`.
-
-    :param app_file: Path to the app (dot-separated).
-    :type app_file: str
-    :raise: pytest_dash.errors.NoAppFoundError
-    :return: App from module.
-    :rtype: dash.Dash
-    """
-    try:
-        app_module = runpy.run_module(app_file)
-        app = app_module['app']
-    except KeyError:
-        raise NoAppFoundError(
-            'No dash `app` instance was found in {}'.format(app_file)
-        )
-    return app

@@ -13,7 +13,8 @@ import dash_html_components as html
 
 # pylint: disable=unused-import
 from pytest_dash.utils import \
-    wait_for_text_to_equal, wait_for_element_by_css_selector, import_app
+    wait_for_text_to_equal, wait_for_element_by_css_selector
+from pytest_dash.application_starters import import_app
 
 
 def test_dash_threaded(dash_threaded, selenium):

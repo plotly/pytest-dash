@@ -3,7 +3,7 @@ import dash
 import pytest
 
 from pytest_dash.errors import DashAppLoadingError, NoAppFoundError
-from pytest_dash.utils import import_app
+from pytest_dash.application_starters import import_app
 
 
 def test_invalid_start_raises(dash_threaded):
