@@ -1,14 +1,17 @@
+"""Experimental behavioral test api for dash apps."""
 import pytest
 from ruamel import yaml
 
 
-# pylint: disable=inconsistent-return-statements
+# pylint: disable=inconsistent-return-statements, missing-docstring
 def pytest_collect_file(parent, path):
     if path.ext == ".yml" and path.basename.startswith("test"):
         return DashBehaviorTestFile(path, parent)
 
 
 class DashBehaviorTestFile(pytest.File):
+    """A yaml test file definition"""
+
     def collect(self):
         raw = yaml.safe_load(self.fspath.open())
         tests = raw.pop('Tests')
@@ -28,20 +31,24 @@ class DashBehaviorTestFile(pytest.File):
 
 
 class DashBehaviorTestItem(pytest.Item):
+    """A single test of a test file."""
     def __init__(self, name, parent, spec, **kwargs):
         super(DashBehaviorTestItem, self).__init__(name, parent)
         self.spec = spec
         self.parameters = kwargs
 
+    # pylint: disable=missing-docstring
     def runtest(self):
         print(self.proper_name)
         print(self.spec)
 
+    # pylint: disable=missing-docstring
     def reportinfo(self):
         return self.fspath, 0, "usecase: %s" % self.proper_name
 
     @property
     def proper_name(self):
+        """Behavior name with the arguments if any."""
         if self.parameters:
             return self.name + '-' + '-'.join(
                 '[{}={}]'.format(k, v)
