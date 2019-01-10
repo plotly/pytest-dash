@@ -73,7 +73,10 @@ https://gist.github.com/parmentf/035de27d6ed1dce0b36a
 | Move/rename repository     | :truck: `:truck:`                             |
 | Other                      | [Be creative](http://www.emoji-cheat-sheet.com/)  |
 
-_**Only rebase accepted**_
+### Rebase instead of merge
+
+The only option for merging pull requests is [Rebase and merge](https://help.github.com/articles/about-pull-request-merges/#rebase-and-merge-your-pull-request-commits).
+As such, it is advisable to rebase when pulling instead of merging.
 
 #### Run the tests
 
