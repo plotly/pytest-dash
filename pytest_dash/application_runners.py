@@ -1,3 +1,4 @@
+"""Run dash applications in a thread or subprocess."""
 import runpy
 import shlex
 import subprocess
@@ -47,7 +48,7 @@ def import_app(app_file):
     return app
 
 
-class BaseDashStarter:
+class BaseDashRunner:
     def __init__(self, driver, keep_open=False):
         self.driver = driver
         self.port = 8050
@@ -75,7 +76,7 @@ class BaseDashStarter:
         return 'http://localhost:{}'.format(self.port)
 
 
-class DashThreaded(BaseDashStarter):
+class DashThreaded(BaseDashRunner):
     def __init__(self, driver, keep_open=False):
         super(DashThreaded, self).__init__(driver, keep_open=keep_open)
         self.stop_route = '/_stop-{}'.format(uuid.uuid4().hex)
@@ -104,7 +105,7 @@ class DashThreaded(BaseDashStarter):
         requests.get('{}{}'.format(self.url, self.stop_route))
 
 
-class DashSubprocess(BaseDashStarter):
+class DashSubprocess(BaseDashRunner):
     def __init__(self, driver, keep_open=False):
         super(DashSubprocess, self).__init__(driver, keep_open=keep_open)
         self.process = None
