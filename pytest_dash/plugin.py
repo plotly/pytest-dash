@@ -12,6 +12,7 @@ import pytest
 
 from selenium import webdriver
 
+from pytest_dash.behaviors import DashBehaviorTestFile
 from pytest_dash.errors import InvalidDriverError
 from pytest_dash.application_runners import DashThreaded, DashSubprocess
 
@@ -36,8 +37,10 @@ def _get_config(config, key, default=None):
     ini = config.getini(key)
     return opt or ini or default
 
-
+################################################################################
 # Plugin hooks.
+################################################################################
+
 
 def pytest_addoption(parser):
     # Add options to the pytest parser, either on the commandline or ini
@@ -66,6 +69,12 @@ def pytest_unconfigure(config):
     # Quit the selenium driver once all tests are cleared.
     DashPlugin.driver.quit()
 
+
+def pytest_collect_file(parent, path):
+    if path.ext == ".yml" and path.basename.startswith("test"):
+        return DashBehaviorTestFile(path, parent, DashPlugin)
+
+
 ################################################################################
 # Fixtures
 ################################################################################
@@ -76,7 +85,6 @@ def dash_threaded():
     """
     Start a local dash server in a new thread. Stop the server in teardown.
 
-    :param selenium: A selenium fixture.
     :return:
     """
 
@@ -90,7 +98,6 @@ def dash_subprocess():
     Start a Dash server with subprocess.Popen and waitress-serve.
     No instance is returned from this fixture.
 
-    :param selenium: A selenium fixture
     :return:
     """
     with DashSubprocess(DashPlugin.driver) as starter:
@@ -100,5 +107,4 @@ def dash_subprocess():
 class DashPlugin:
     """Global plugin configuration and driver container"""
     driver = None
-
-
+    configs = {}
