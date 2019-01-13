@@ -49,6 +49,7 @@ def import_app(app_file):
 
 
 class BaseDashRunner:
+    """Base context manager class for running applications."""
     def __init__(self, driver, keep_open=False):
         self.driver = driver
         self.port = 8050
@@ -56,9 +57,21 @@ class BaseDashRunner:
         self.keep_open = keep_open
 
     def start(self, *args, **kwargs):
+        """
+        Start the application.
+
+        :param args:
+        :param kwargs:
+        :return:
+        """
         raise NotImplementedError
 
     def stop(self):
+        """
+        Stop the dash application.
+
+        :return:
+        """
         raise NotImplementedError
 
     def __call__(self, *args, **kwargs):
@@ -73,10 +86,16 @@ class BaseDashRunner:
 
     @property
     def url(self):
+        """
+        The url with the port auto-formatted.
+
+        :return: Formatted url with the port.
+        """
         return 'http://localhost:{}'.format(self.port)
 
 
 class DashThreaded(BaseDashRunner):
+    """Runs a dash application in a thread."""
     def __init__(self, driver, keep_open=False):
         super(DashThreaded, self).__init__(driver, keep_open=keep_open)
         self.stop_route = '/_stop-{}'.format(uuid.uuid4().hex)
@@ -106,6 +125,7 @@ class DashThreaded(BaseDashRunner):
 
 
 class DashSubprocess(BaseDashRunner):
+    """Runs a dash application in a waitress-serve subprocess."""
     def __init__(self, driver, keep_open=False):
         super(DashSubprocess, self).__init__(driver, keep_open=keep_open)
         self.process = None
