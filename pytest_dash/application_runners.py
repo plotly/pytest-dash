@@ -102,6 +102,16 @@ class DashThreaded(BaseDashRunner):
 
     def start(self, app,
               port=8050, start_wait_time=0.5, start_timeout=10, **kwargs):
+        """
+        Start the threaded dash app server.
+
+        :param app: The dash application instance.
+        :param port: Port of the dash application.
+        :param start_wait_time: Poll rate for the server started wait
+        :param start_timeout: Max time to start the server.
+        :param kwargs:
+        :return:
+        """
         app.server.add_url_rule(self.stop_route, self.stop_route, _stop_server)
         self.port = port
 
@@ -131,6 +141,14 @@ class DashSubprocess(BaseDashRunner):
         self.process = None
 
     def start(self, app_module, server_instance='app.server', port=8050):
+        """
+        Start the waitress-serve process.
+
+        :param app_module: Dot notation path to the app file
+        :param server_instance: Variable name of the flask instance.
+        :param port: Port to serve the application.
+        :return:
+        """
         server_path = '{}:{}'.format(app_module, server_instance)
         self.port = port
 
