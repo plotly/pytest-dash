@@ -17,7 +17,7 @@ from pytest_dash.utils import \
 from pytest_dash.application_starters import import_app
 
 
-def test_dash_threaded(dash_threaded, selenium):
+def test_dash_threaded(dash_threaded):
     app = dash.Dash(__name__)
 
     app.layout = html.Div([
@@ -36,13 +36,13 @@ def test_dash_threaded(dash_threaded, selenium):
         return n_clicks
 
     dash_threaded(app, port=8090)
-    assert 'http://localhost:8090' in selenium.current_url
+    assert 'http://localhost:8090' in dash_threaded.driver.current_url
 
-    clicker = wait_for_element_by_css_selector(selenium, '#clicker')
+    clicker = wait_for_element_by_css_selector(dash_threaded.driver, '#clicker')
 
     for i in range(6):
         clicker.click()
-        wait_for_text_to_equal(selenium, '#output', str(i + 1))
+        wait_for_text_to_equal(dash_threaded.driver, '#output', str(i + 1))
 
     assert call_count.qsize() == 7
 

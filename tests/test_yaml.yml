@@ -6,7 +6,7 @@ SimpleCallback:
             type: str
             default: hello world
     application:
-        path: <app_path>
+        path: test_apps.simple_app
         options:
             port: 8051
     context:
@@ -19,6 +19,6 @@ SimpleCallback:
         - #output.text should be $var1
 
 Tests:
-        - SimpleCallback
-        - SimpleCallback:
-            $var1: foo bar
+    - SimpleCallback
+    - SimpleCallback:
+        $var1: foo bar
