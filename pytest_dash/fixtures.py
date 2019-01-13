@@ -33,7 +33,7 @@ def percy_snapshot(selenium):
 
 
 @pytest.fixture
-def dash_threaded(selenium):
+def dash_threaded():
     """
     Start a local dash server in a new thread. Stop the server in teardown.
 
@@ -41,12 +41,12 @@ def dash_threaded(selenium):
     :return:
     """
 
-    with DashThreaded(selenium) as starter:
+    with DashThreaded() as starter:
         yield starter
 
 
 @pytest.fixture
-def dash_subprocess(selenium):
+def dash_subprocess():
     """
     Start a Dash server with subprocess.Popen and waitress-serve.
     No instance is returned from this fixture.
@@ -54,5 +54,5 @@ def dash_subprocess(selenium):
     :param selenium: A selenium fixture
     :return:
     """
-    with DashSubprocess(selenium) as starter:
+    with DashSubprocess() as starter:
         yield starter
