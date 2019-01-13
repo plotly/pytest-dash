@@ -43,7 +43,7 @@ jobs:
           name: run tests
           command: |
             . venv/bin/activate
-            pytest tests --driver Chrome
+            pytest tests
 
       - store_artifacts:
           path: test-reports
