@@ -9,44 +9,8 @@ import sys
 import flask
 import requests
 
-from selenium import webdriver
-
 from pytest_dash.errors import NoAppFoundError, DashAppLoadingError
 from pytest_dash.utils import _wait_for_client_app_started
-
-_DRIVER_MAP = {
-    'Chrome': webdriver.Chrome,
-    'Firefox': webdriver.Firefox,
-    'Remote': webdriver.Remote,
-    'Safari': webdriver.Safari,
-    'Opera': webdriver.Opera,
-}
-
-
-def pytest_addoption(parser):
-    # Add options to the pytest parser, either on the commandline or ini
-    # TODO wrapper method to add both at same time.
-    # TODO add more options for the selenium driver.
-    parser.addoption('--webdriver', help='Selenium driver to use')
-    parser.addini('webdriver', 'Selenium driver to use')
-
-
-def pytest_configure(config):
-    # Called once before the tests are run
-    # Get and configure global objects for the plugin to use.
-    # TODO wrapper get from option first then ini with default
-    # TODO get all the options and map a global dict.
-    driver_opt = config.getoption('webdriver')
-    driver_ini = config.getini('webdriver')
-    driver_name = driver_opt or driver_ini
-    driver = _DRIVER_MAP.get(driver_name)()
-
-    BaseDashStarter.driver = driver
-
-
-def pytest_unconfigure(config):
-    # Quit the selenium driver once all tests are cleared.
-    BaseDashStarter.driver.quit()
 
 
 def _stop_server():
@@ -84,9 +48,8 @@ def import_app(app_file):
 
 
 class BaseDashStarter:
-    driver = None
-
-    def __init__(self, keep_open=False):
+    def __init__(self, driver, keep_open=False):
+        self.driver = driver
         self.port = 8050
         self.started = False
         self.keep_open = keep_open
@@ -113,8 +76,8 @@ class BaseDashStarter:
 
 
 class DashThreaded(BaseDashStarter):
-    def __init__(self, keep_open=False):
-        super(DashThreaded, self).__init__(keep_open=keep_open)
+    def __init__(self, driver, keep_open=False):
+        super(DashThreaded, self).__init__(driver, keep_open=keep_open)
         self.stop_route = '/_stop-{}'.format(uuid.uuid4().hex)
 
     def start(self, app,
@@ -142,8 +105,8 @@ class DashThreaded(BaseDashStarter):
 
 
 class DashSubprocess(BaseDashStarter):
-    def __init__(self, keep_open=False):
-        super(DashSubprocess, self).__init__(keep_open=keep_open)
+    def __init__(self, driver, keep_open=False):
+        super(DashSubprocess, self).__init__(driver, keep_open=keep_open)
         self.process = None
 
     def start(self, app_module, server_instance='app.server', port=8050):

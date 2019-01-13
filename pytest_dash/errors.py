@@ -5,8 +5,8 @@ class PytestDashError(Exception):
     """Base error for pytest-dash."""
 
 
-class NoDriverError(PytestDashError):
-    """No selenium driver was specified."""
+class InvalidDriverError(PytestDashError):
+    """An invalid selenium driver was specified."""
 
 
 class NoAppFoundError(PytestDashError):

@@ -6,8 +6,6 @@ import sys
 import pytest
 import percy
 
-from pytest_dash.application_starters import DashThreaded, DashSubprocess
-
 
 @pytest.fixture(scope='package')
 def percy_snapshot(selenium):
@@ -30,29 +28,3 @@ def percy_snapshot(selenium):
     yield take_snapshot
 
     percy_runner.finalize_build()
-
-
-@pytest.fixture
-def dash_threaded():
-    """
-    Start a local dash server in a new thread. Stop the server in teardown.
-
-    :param selenium: A selenium fixture.
-    :return:
-    """
-
-    with DashThreaded() as starter:
-        yield starter
-
-
-@pytest.fixture
-def dash_subprocess():
-    """
-    Start a Dash server with subprocess.Popen and waitress-serve.
-    No instance is returned from this fixture.
-
-    :param selenium: A selenium fixture
-    :return:
-    """
-    with DashSubprocess() as starter:
-        yield starter
