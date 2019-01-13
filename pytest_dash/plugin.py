@@ -13,7 +13,7 @@ import pytest
 from selenium import webdriver
 
 from pytest_dash.errors import InvalidDriverError
-from pytest_dash.application_starters import DashThreaded, DashSubprocess
+from pytest_dash.application_runners import DashThreaded, DashSubprocess
 
 
 _DRIVER_MAP = {

@@ -2,6 +2,8 @@
 import pytest
 from ruamel import yaml
 
+from pytest_dash.application_runners import DashSubprocess
+
 
 # pylint: disable=inconsistent-return-statements, missing-docstring
 def pytest_collect_file(parent, path):
