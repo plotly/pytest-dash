@@ -1,7 +1,7 @@
 SimpleCallback:
     description: Test a dcc.Input callback output to a html.Div when a html.Button is clicked\
     parameters:
-        - $var1:
+        var1:
             description: Value to send to the input
             type: str
             default: hello world
@@ -9,14 +9,11 @@ SimpleCallback:
         path: test_apps.simple_app
         options:
             port: 8051
-    context:
-        - #input.value is "Initial Value"
     event:
-        - clear #input
-        - enter $var1 in #input
-        - click #btn
+        - "clear #value"
+        - "enter $var1 in #value"
     outcome:
-        - #output.text should be $var1
+        - "#value.value == $var1"
 
 Tests:
     - SimpleCallback
