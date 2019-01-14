@@ -3,6 +3,7 @@ import pytest
 from ruamel import yaml
 
 from pytest_dash.application_runners import DashSubprocess
+from pytest_dash.behavior_parser import parser_factory
 
 
 class DashBehaviorTestFile(pytest.File):
@@ -41,6 +42,7 @@ class DashBehaviorTestItem(pytest.Item):
     def __init__(self, driver, name, parent, spec, **kwargs):
         super(DashBehaviorTestItem, self).__init__(name, parent)
         self.driver = driver
+        self.parser = parser_factory(driver)  # TODO improve creation by plugin
         self.spec = spec
         self.parameters = kwargs
 
@@ -51,6 +53,7 @@ class DashBehaviorTestItem(pytest.Item):
         app_options = application.get('options', {})
         app_port = app_options.get('port', 8051)
         events = self.spec.get('event')
+        outcome = self.spec.get('outcome')
 
         with DashSubprocess(self.driver) as starter:
             starter(app_path, port=app_port)
