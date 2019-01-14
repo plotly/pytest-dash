@@ -102,6 +102,7 @@ class DashThreaded(BaseDashRunner):
         super(DashThreaded, self).__init__(driver, keep_open=keep_open)
         self.stop_route = '/_stop-{}'.format(uuid.uuid4().hex)
 
+    # pylint: disable=arguments-differ
     def start(
             self, app, port=8050, start_wait_time=0.5, start_timeout=10,
             **kwargs
@@ -145,6 +146,7 @@ class DashSubprocess(BaseDashRunner):
         super(DashSubprocess, self).__init__(driver, keep_open=keep_open)
         self.process = None
 
+    # pylint: disable=arguments-differ
     def start(self, app_module, server_instance='app.server', port=8050):
         """
         Start the waitress-serve process.
