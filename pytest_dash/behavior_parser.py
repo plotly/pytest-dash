@@ -17,7 +17,7 @@ start: compare
 ?variable: /\$[a-zA-Z0-9_]+/
 
 ?raw_value: NUMBER
-    | ESCAPED_STRING
+    | ESCAPED_STRING -> escape_string
     | "true"i -> true
     | "false"i -> false
     | ("null"i | "none"i | "nil"i) -> null
@@ -60,14 +60,6 @@ compare: value comparison value
 '''
 
 
-def _get_value(value):
-    if isinstance(value, lark.Token):
-        if value.type == "ESCAPED_STRING":
-            return value.value.strip('"')
-        return value.value
-    return value
-
-
 # noinspection PyMethodMayBeStatic
 @lark.v_args(inline=True)
 class BehaviorTransformer(lark.Transformer):
@@ -106,10 +98,7 @@ class BehaviorTransformer(lark.Transformer):
     def element_prop(self, element, prop):
         return element.get_property(prop)
 
-    def compare(self, value1, comparison, value2: lark.Token):
-        v1 = _get_value(value1)
-        v2 = _get_value(value2)
-
+    def compare(self, v1, comparison, v2):
         if comparison.data == 'eq':
             assert v1 == v2
         elif comparison.data == 'lt':
@@ -141,6 +130,9 @@ class BehaviorTransformer(lark.Transformer):
     def select_by_index(self, index, element):
         select = Select(element)
         select.select_by_index(index)
+
+    def escape_string(self, s):
+        return s.strip('"')
 
 
 def parser_factory(driver):
