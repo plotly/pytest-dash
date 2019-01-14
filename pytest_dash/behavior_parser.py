@@ -14,7 +14,7 @@ start: compare
     | command
 
 // Variable to use from the parameters
-?variable: /\$[a-zA-Z0-9_]+/
+?variable: /\$[a-zA-Z0-9_]+/ -> variable
 
 ?raw_value: NUMBER
     | ESCAPED_STRING -> escape_string
@@ -24,6 +24,7 @@ start: compare
 
 ?value: raw_value
     | element_prop
+    | variable
 
 ?input_value: raw_value
     | variable
@@ -65,12 +66,16 @@ compare: value comparison value
 class BehaviorTransformer(lark.Transformer):
     """Transform and execute behavior commands."""
 
-    def __init__(self, driver):
+    def __init__(self, driver, variables=None):
         """
         :param driver: Selenium driver to find elements in the tree
         :type driver: selenium.webdriver.remote.webdriver.WebDriver
         """
         self.driver = driver
+        self.variables = variables or {}
+
+    def variable(self, name):
+        return self.variables.get(name.lstrip('$'))
 
     def element_id(self, element_id):
         """
@@ -135,16 +140,17 @@ class BehaviorTransformer(lark.Transformer):
         return s.strip('"')
 
 
-def parser_factory(driver):
+def parser_factory(driver, variables=None):
     """
     Create a Lark parser with a BehaviorTransformer with the provided
     selenium driver to find the elements.
 
     :param driver:
+    :param variables:
     :return:
     """
     return lark.Lark(
         _grammar,
         parser='lalr',
-        transformer=BehaviorTransformer(driver)
+        transformer=BehaviorTransformer(driver, variables)
     )
