@@ -1,4 +1,6 @@
 """Experimental behavioral test api for dash apps."""
+import itertools
+
 import pytest
 from ruamel import yaml
 
@@ -42,7 +44,6 @@ class DashBehaviorTestItem(pytest.Item):
     def __init__(self, driver, name, parent, spec, **kwargs):
         super(DashBehaviorTestItem, self).__init__(name, parent)
         self.driver = driver
-        self.parser = parser_factory(driver)  # TODO improve creation by plugin
         self.spec = spec
         self.parameters = kwargs
 
@@ -51,18 +52,20 @@ class DashBehaviorTestItem(pytest.Item):
         application = self.spec.get('application', {})
         app_path = application.get('path')
         app_options = application.get('options', {})
-        app_port = app_options.get('port', 8051)
+        app_port = app_options.get('port', 8050)
         events = self.spec.get('event')
-        outcome = self.spec.get('outcome')
+        outcomes = self.spec.get('outcome')
+        parameters = self.spec.get('parameters', {})
+        variables = {
+            k: v.get('default') for k, v in parameters.items()
+        }
+        parser = parser_factory(self.driver, variables)
 
         with DashSubprocess(self.driver) as starter:
             starter(app_path, port=app_port)
-            for e in events:
-                self.execute_event(e)
+            for e in itertools.chain(events, outcomes):
+                parser.parse(e)
 
     # pylint: disable=missing-docstring
     def reportinfo(self):
         return self.fspath, 0, "usecase: %s" % self.name
-
-    def execute_event(self, event):
-        print(event)
