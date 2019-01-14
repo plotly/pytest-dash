@@ -62,8 +62,8 @@ class DashBehaviorTestItem(pytest.Item):
 
         with DashSubprocess(self.driver) as starter:
             starter(app_path, port=app_port)
-            for e in itertools.chain(events, outcomes):
-                parser.parse(e)
+            for command in itertools.chain(events, outcomes):
+                parser.parse(command)
 
     # pylint: disable=missing-docstring
     def reportinfo(self):
