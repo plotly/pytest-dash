@@ -28,10 +28,10 @@ _driver_map = {
 }
 
 
-def _create_config(parser, key, help=None):
+def _create_config(parser, key, _help=None):
     # Create an option for pytest command line and ini
-    parser.addoption('--{}'.format(key), help=help)
-    parser.addini(key, help=help)
+    parser.addoption('--{}'.format(key), help=_help)
+    parser.addini(key, help=_help)
 
 
 def _get_config(config, key, default=None):
@@ -68,11 +68,13 @@ def pytest_configure(config):
     DashPlugin.driver = driver
 
 
+# pylint: disable=unused-argument
 def pytest_unconfigure(config):
     # Quit the selenium driver once all tests are cleared.
     DashPlugin.driver.quit()
 
 
+# pylint: disable=inconsistent-return-statements
 def pytest_collect_file(parent, path):
     if path.ext == ".yml" and path.basename.startswith("test"):
         return DashBehaviorTestFile(path, parent, DashPlugin)
@@ -107,6 +109,7 @@ def dash_subprocess():
         yield starter
 
 
+# pylint: disable=too-few-public-methods
 class DashPlugin:
     """Global plugin configuration and driver container"""
     driver = None
