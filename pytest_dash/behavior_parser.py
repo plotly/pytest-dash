@@ -60,6 +60,7 @@ compare: value comparison value
 
 
 # noinspection PyMethodMayBeStatic
+# pylint: disable=no-self-use
 @lark.v_args(inline=True)
 class BehaviorTransformer(lark.Transformer):
     """Transform and execute behavior commands."""
@@ -101,17 +102,17 @@ class BehaviorTransformer(lark.Transformer):
     def element_prop(self, element, prop):
         return element.get_property(prop)
 
-    def compare(self, v1, comparison, v2):
+    def compare(self, left, comparison, right):
         if comparison.data == 'eq':
-            assert v1 == v2
+            assert left == right
         elif comparison.data == 'lt':
-            assert v1 < v2
+            assert left < right
         elif comparison.data == 'lte':
-            assert v1 <= v2
+            assert left <= right
         elif comparison.data == 'gt':
-            assert v1 > v2
+            assert left > right
         elif comparison.data == 'gte':
-            assert v1 >= v2
+            assert left >= right
 
     def clear(self, element):
         element.clear()
@@ -134,8 +135,8 @@ class BehaviorTransformer(lark.Transformer):
         select = Select(element)
         select.select_by_index(index)
 
-    def escape_string(self, s):
-        return s.strip('"')
+    def escape_string(self, escaped):
+        return escaped.strip('"')
 
 
 def parser_factory(driver, variables=None):

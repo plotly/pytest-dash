@@ -16,7 +16,7 @@ from pytest_dash.behaviors import DashBehaviorTestFile
 from pytest_dash.errors import InvalidDriverError
 from pytest_dash.application_runners import DashThreaded, DashSubprocess
 
-_DRIVER_MAP = {
+_driver_map = {
     'Chrome': webdriver.Chrome,
     'Firefox': webdriver.Firefox,
     'Remote': webdriver.Remote,
@@ -57,13 +57,13 @@ def pytest_configure(config):
     # TODO get all the options and map a global dict.
     driver_name = _get_config(config, 'webdriver')
 
-    if driver_name not in _DRIVER_MAP:
+    if driver_name not in _driver_map:
         raise InvalidDriverError(
             '{} is not a valid webdriver value.\n'
-            'Valid drivers {}'.format(driver_name, _DRIVER_MAP.keys())
+            'Valid drivers {}'.format(driver_name, _driver_map.keys())
         )
 
-    driver = _DRIVER_MAP.get(driver_name)()
+    driver = _driver_map.get(driver_name)()
 
     DashPlugin.driver = driver
 
