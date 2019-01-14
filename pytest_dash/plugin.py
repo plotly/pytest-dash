@@ -23,6 +23,9 @@ _DRIVER_MAP = {
     'Remote': webdriver.Remote,
     'Safari': webdriver.Safari,
     'Opera': webdriver.Opera,
+    'PhantomJS': webdriver.PhantomJS,
+    'Edge': webdriver.Edge,
+    'Ie': webdriver.Ie,
 }
 
 
