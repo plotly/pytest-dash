@@ -1,3 +1,4 @@
+"""Custom lark parser and transformer for dash behavior tests."""
 import lark
 
 from selenium.webdriver.support.ui import Select
@@ -60,7 +61,7 @@ compare: value comparison value
 
 
 # noinspection PyMethodMayBeStatic
-# pylint: disable=no-self-use
+# pylint: disable=no-self-use, missing-docstring
 @lark.v_args(inline=True)
 class BehaviorTransformer(lark.Transformer):
     """Transform and execute behavior commands."""
@@ -144,7 +145,7 @@ def parser_factory(driver, variables=None):
     Create a Lark parser with a BehaviorTransformer with the provided
     selenium driver to find the elements.
 
-    :param driver:
+    :param driver: Selenium driver to use when parsing elements.
     :param variables:
     :return:
     """

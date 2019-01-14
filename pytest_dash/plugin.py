@@ -44,13 +44,14 @@ def _get_config(config, key, default=None):
 # Plugin hooks.
 ###############################################################################
 
-
+# pylint: disable=missing-docstring
 def pytest_addoption(parser):
     # Add options to the pytest parser, either on the commandline or ini
     # TODO add more options for the selenium driver.
     _create_config(parser, 'webdriver', 'Name of the selenium driver to use')
 
 
+# pylint: disable=missing-docstring
 def pytest_configure(config):
     # Called once before the tests are run
     # Get and configure global objects for the plugin to use.
@@ -68,13 +69,13 @@ def pytest_configure(config):
     DashPlugin.driver = driver
 
 
-# pylint: disable=unused-argument
+# pylint: disable=unused-argument, missing-docstring
 def pytest_unconfigure(config):
     # Quit the selenium driver once all tests are cleared.
     DashPlugin.driver.quit()
 
 
-# pylint: disable=inconsistent-return-statements
+# pylint: disable=inconsistent-return-statements, missing-docstring
 def pytest_collect_file(parent, path):
     if path.ext == ".yml" and path.basename.startswith("test"):
         return DashBehaviorTestFile(path, parent, DashPlugin)
