@@ -16,7 +16,6 @@ from pytest_dash.behaviors import DashBehaviorTestFile
 from pytest_dash.errors import InvalidDriverError
 from pytest_dash.application_runners import DashThreaded, DashSubprocess
 
-
 _DRIVER_MAP = {
     'Chrome': webdriver.Chrome,
     'Firefox': webdriver.Firefox,
@@ -39,6 +38,7 @@ def _get_config(config, key, default=None):
     opt = config.getoption(key)
     ini = config.getini(key)
     return opt or ini or default
+
 
 ################################################################################
 # Plugin hooks.

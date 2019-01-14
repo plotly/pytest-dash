@@ -38,7 +38,9 @@ def test_dash_threaded(dash_threaded):
     dash_threaded(app, port=8090)
     assert 'http://localhost:8090' in dash_threaded.driver.current_url
 
-    clicker = wait_for_element_by_css_selector(dash_threaded.driver, '#clicker')
+    clicker = wait_for_element_by_css_selector(
+        dash_threaded.driver, '#clicker'
+    )
 
     for i in range(6):
         clicker.click()

@@ -10,6 +10,7 @@ from pytest_dash.behavior_parser import parser_factory
 
 class DashBehaviorTestFile(pytest.File):
     """A yaml test file definition"""
+
     def __init__(self, fspath, parent, plugin):
         super(DashBehaviorTestFile, self).__init__(fspath, parent)
         self.plugin = plugin
@@ -56,9 +57,7 @@ class DashBehaviorTestItem(pytest.Item):
         events = self.spec.get('event')
         outcomes = self.spec.get('outcome')
         parameters = self.spec.get('parameters', {})
-        variables = {
-            k: v.get('default') for k, v in parameters.items()
-        }
+        variables = {k: v.get('default') for k, v in parameters.items()}
         parser = parser_factory(self.driver, variables)
 
         with DashSubprocess(self.driver) as starter:

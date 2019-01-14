@@ -2,12 +2,10 @@ import lark
 
 from selenium.webdriver.support.ui import Select
 
-
 from pytest_dash.utils import (
     wait_for_element_by_id,
     wait_for_element_by_css_selector,
 )
-
 
 _grammar = r'''
 start: compare

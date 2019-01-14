@@ -50,6 +50,7 @@ def import_app(app_file):
 
 class BaseDashRunner:
     """Base context manager class for running applications."""
+
     def __init__(self, driver, keep_open=False):
         self.driver = driver
         self.port = 8050
@@ -96,12 +97,15 @@ class BaseDashRunner:
 
 class DashThreaded(BaseDashRunner):
     """Runs a dash application in a thread."""
+
     def __init__(self, driver, keep_open=False):
         super(DashThreaded, self).__init__(driver, keep_open=keep_open)
         self.stop_route = '/_stop-{}'.format(uuid.uuid4().hex)
 
-    def start(self, app,
-              port=8050, start_wait_time=0.5, start_timeout=10, **kwargs):
+    def start(
+            self, app, port=8050, start_wait_time=0.5, start_timeout=10,
+            **kwargs
+    ):
         """
         Start the threaded dash app server.
 
@@ -136,6 +140,7 @@ class DashThreaded(BaseDashRunner):
 
 class DashSubprocess(BaseDashRunner):
     """Runs a dash application in a waitress-serve subprocess."""
+
     def __init__(self, driver, keep_open=False):
         super(DashSubprocess, self).__init__(driver, keep_open=keep_open)
         self.process = None
