@@ -1,7 +1,7 @@
 """Custom lark parser and transformer for dash behavior tests."""
 import lark
 
-from selenium.webdriver.support.ui import Select
+from selenium.webdriver.support.ui import Select, WebDriverWait
 
 from pytest_dash.utils import (
     wait_for_element_by_id,
@@ -51,6 +51,7 @@ compare: value comparison value
     | "select by value" input_value element -> select_by_value
     | "select by text" ESCAPED_STRING element -> select_by_text
     | "select by index" NUMBER element -> select_by_index
+    | "wait for text to equal" value "in" element -> wait_for_text_to_equal
 
 %import common.CNAME -> NAME
 %import common.NUMBER
@@ -93,7 +94,9 @@ class BehaviorTransformer(lark.Transformer):
         :param selector:
         :return:
         """
-        return wait_for_element_by_css_selector(self.driver, selector)
+        return wait_for_element_by_css_selector(
+            self.driver, selector.lstrip('{').rstrip('}')
+        )
 
     def element(self, identifier):
         # Just need to return the element that is already found
@@ -138,6 +141,16 @@ class BehaviorTransformer(lark.Transformer):
 
     def escape_string(self, escaped):
         return escaped.strip('"')
+
+    def wait_for_text_to_equal(self, value, element):
+        # We have the element and not the selector so we cannot use the
+        # wait_for_text wrapper.
+        def _text_equal(_):
+            return element.text == value
+
+        WebDriverWait(self.driver, 10).until(
+            _text_equal
+        )
 
 
 def parser_factory(driver, variables=None):
