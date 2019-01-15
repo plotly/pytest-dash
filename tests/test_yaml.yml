@@ -19,4 +19,4 @@ SimpleCallback:
 Tests:
     - SimpleCallback
     - SimpleCallback:
-        $var1: foo bar
+        var1: foo bar

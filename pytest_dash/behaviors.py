@@ -57,7 +57,10 @@ class DashBehaviorTestItem(pytest.Item):
         events = self.spec.get('event')
         outcomes = self.spec.get('outcome')
         parameters = self.spec.get('parameters', {})
-        variables = {k: v.get('default') for k, v in parameters.items()}
+        variables = {
+            k: self.parameters.get(k, v.get('default'))
+            for k, v in parameters.items()
+        }
         parser = parser_factory(self.driver, variables)
 
         with DashSubprocess(self.driver) as starter:
