@@ -101,6 +101,7 @@ class DashThreaded(BaseDashRunner):
     def __init__(self, driver, keep_open=False):
         super(DashThreaded, self).__init__(driver, keep_open=keep_open)
         self.stop_route = '/_stop-{}'.format(uuid.uuid4().hex)
+        self.thread = None
 
     # pylint: disable=arguments-differ
     def start(
@@ -125,9 +126,10 @@ class DashThreaded(BaseDashRunner):
             app.css.config.serve_locally = True
             app.run_server(debug=False, port=port, threaded=True)
 
-        thread = threading.Thread(target=run)
-        thread.daemon = True
-        thread.start()
+        self.thread = threading.Thread(target=run)
+
+        self.thread.daemon = True
+        self.thread.start()
         _wait_for_client_app_started(
             self.driver, self.url, start_wait_time, start_timeout
         )
@@ -137,6 +139,8 @@ class DashThreaded(BaseDashRunner):
 
     def stop(self):
         requests.get('{}{}'.format(self.url, self.stop_route))
+        while self.thread.is_alive():
+            time.sleep(0.1)
 
 
 class DashSubprocess(BaseDashRunner):
