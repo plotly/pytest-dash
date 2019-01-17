@@ -30,6 +30,7 @@ jobs:
           name: lint
           command: |
             . venv/bin/activate
+            pip freeze
             pylint pytest_dash tests test_apps
             flake8
 
