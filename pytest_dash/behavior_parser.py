@@ -95,7 +95,8 @@ class BehaviorTransformer(lark.Transformer):
         :return:
         """
         return wait_for_element_by_css_selector(
-            self.driver, selector.lstrip('{').rstrip('}')
+            self.driver,
+            selector.lstrip('{').rstrip('}')
         )
 
     def element(self, identifier):
@@ -148,9 +149,7 @@ class BehaviorTransformer(lark.Transformer):
         def _text_equal(_):
             return element.text == value
 
-        WebDriverWait(self.driver, 10).until(
-            _text_equal
-        )
+        WebDriverWait(self.driver, 10).until(_text_equal)
 
 
 def parser_factory(driver, variables=None):

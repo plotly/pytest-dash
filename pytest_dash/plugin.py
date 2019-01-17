@@ -44,6 +44,7 @@ def _get_config(config, key, default=None):
 # Plugin hooks.
 ###############################################################################
 
+
 # pylint: disable=missing-docstring
 def pytest_addoption(parser):
     # Add options to the pytest parser, either on the commandline or ini
