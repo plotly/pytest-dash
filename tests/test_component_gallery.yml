@@ -1,0 +1,41 @@
+InputBehavior:
+  description: Test text can entered/customized in a Input component in behavior tests.
+  parameters:
+    value:
+        default: Input value
+  application:
+    path: test_apps.component_gallery
+  event:
+    - "enter $value in #input"
+  outcome:
+    - "wait for text to equal $value in #input-output"
+
+
+DropdownBehavior:
+  description: Test that a dropdown value can be selected in behavior tests.
+  application:
+    path: test_apps.component_gallery
+  parameters:
+    value:
+      default: '1'
+  event:
+    - 'enter $value in {#dropdown .Select-input input}'
+    - 'click {#dropdown .Select .Select-menu-outer}'
+  outcome:
+    - "wait for text to equal $value in #dropdown-output"
+
+RadioItemsBehavior:
+  description: Test radio items value can be changed in behavior tests.
+  application:
+    path: test_apps.component_gallery
+  event:
+    - 'click {#radio-items > label:nth-child(9) > input[type="radio"]}'
+  outcome:
+    - "wait for text to equal 9 in #radio-items-output"
+
+Tests:
+  - InputBehavior
+  - InputBehavior:
+      value: Non default
+  - DropdownBehavior
+  - RadioItemsBehavior
