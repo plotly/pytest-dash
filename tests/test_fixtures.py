@@ -52,23 +52,26 @@ def test_dash_threaded(dash_threaded):
 @pytest.mark.skipif(
     'os.environ.get("CIRCLECI")', reason='Bugged because of #15'
 )
-def test_imported_app(dash_threaded, selenium):
+def test_imported_app(dash_threaded):
     app = import_app('test_apps.simple_app')
     dash_threaded(app)
 
-    value_input = selenium.find_element_by_id('value')
+    driver = dash_threaded.driver
+
+    value_input = driver.find_element_by_id('value')
     value_input.clear()
     value_input.send_keys('Hello imported dash')
 
-    wait_for_text_to_equal(selenium, '#out', 'Hello imported dash')
+    wait_for_text_to_equal(driver, '#out', 'Hello imported dash')
 
 
-def test_subprocess(dash_subprocess, selenium):
+def test_subprocess(dash_subprocess):
     dash_subprocess('test_apps.simple_app', port=8080)
-    assert 'http://localhost:8080' in selenium.current_url
+    driver = dash_subprocess.driver
+    assert 'http://localhost:8080' in driver.current_url
 
-    value_input = selenium.find_element_by_id('value')
+    value_input = driver.find_element_by_id('value')
     value_input.clear()
     value_input.send_keys('Hello dash subprocess')
 
-    wait_for_text_to_equal(selenium, '#out', 'Hello dash subprocess')
+    wait_for_text_to_equal(driver, '#out', 'Hello dash subprocess')
