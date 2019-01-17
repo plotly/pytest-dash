@@ -62,7 +62,7 @@ compare: value comparison value
 
 
 # noinspection PyMethodMayBeStatic
-# pylint: disable=no-self-use, missing-docstring
+# pylint: disable=no-self-use, missing-docstring, no-member
 @lark.v_args(inline=True)
 class BehaviorTransformer(lark.Transformer):
     """Transform and execute behavior commands."""
@@ -161,6 +161,7 @@ def parser_factory(driver, variables=None):
     :param variables:
     :return:
     """
+    # pylint: disable=no-member
     return lark.Lark(
         _grammar,
         parser='lalr',
