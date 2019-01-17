@@ -2,6 +2,27 @@
 
 Versions follow [Semantic Versioning](https://www.semver.org)
 
+## [2.0.0] UNRELEASED
+### Added
+- Behavior tests from yaml description.
+- Plugin configuration hooks for selenium options (Currently only `webdriver`)
+    - Configuration from commandline
+    - Configuration from pytest.ini file.
+
+### Changed
+- Application runners (dash_threaded, dash_subprocess) refactored to a context manager with own selenium driver.
+
+### Fixed
+- dash_threaded now wait til the server has stopped in teardown.
+
+### Breaking Changes
+#### Removed
+- Removed `pytest-selenium` dependency, now incompatible.
+- Removed `percy_snapshot` fixture.
+
+#### Moved
+- `utils.import_app` moved to `application_runners.py`
+
 ## [1.1.0] 2019-01-01
 ### Added
 - Base exception type: `PytestDashError` [#23](https://github.com/T4rk1n/pytest-dash/pull/23)
