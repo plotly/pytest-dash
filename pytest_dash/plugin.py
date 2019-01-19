@@ -52,34 +52,46 @@ def pytest_addoption(parser):
     _create_config(parser, 'webdriver', 'Name of the selenium driver to use')
 
 
-# pylint: disable=missing-docstring
+# pylint: disable=too-few-public-methods
+class DashPlugin:
+    """Global plugin configuration and driver container"""
+
+    def __init__(self):
+        self.driver = None
+        self.configs = {}
+
+    # pylint: disable=missing-docstring
+    def pytest_configure(self, config):
+        # Called once before the tests are run
+        # Get and configure global objects for the plugin to use.
+        # TODO get all the options and map a global dict.
+        driver_name = _get_config(config, 'webdriver')
+
+        if driver_name not in _driver_map:
+            raise InvalidDriverError(
+                '{} is not a valid webdriver value.\n'
+                'Valid drivers {}'.format(driver_name, _driver_map.keys())
+            )
+
+        self.driver = _driver_map.get(driver_name)()
+
+    # pylint: disable=unused-argument, missing-docstring
+    def pytest_unconfigure(self, config):
+        # Quit the selenium driver once all tests are cleared.
+        self.driver.quit()
+
+    # pylint: disable=inconsistent-return-statements, missing-docstring
+    def pytest_collect_file(self, parent, path):
+        if path.ext == ".yml" and path.basename.startswith("test"):
+            return DashBehaviorTestFile(path, parent, self)
+
+
+_plugin = DashPlugin()
+
+
+@pytest.mark.tryfirst
 def pytest_configure(config):
-    # Called once before the tests are run
-    # Get and configure global objects for the plugin to use.
-    # TODO get all the options and map a global dict.
-    driver_name = _get_config(config, 'webdriver')
-
-    if driver_name not in _driver_map:
-        raise InvalidDriverError(
-            '{} is not a valid webdriver value.\n'
-            'Valid drivers {}'.format(driver_name, _driver_map.keys())
-        )
-
-    driver = _driver_map.get(driver_name)()
-
-    DashPlugin.driver = driver
-
-
-# pylint: disable=unused-argument, missing-docstring
-def pytest_unconfigure(config):
-    # Quit the selenium driver once all tests are cleared.
-    DashPlugin.driver.quit()
-
-
-# pylint: disable=inconsistent-return-statements, missing-docstring
-def pytest_collect_file(parent, path):
-    if path.ext == ".yml" and path.basename.startswith("test"):
-        return DashBehaviorTestFile(path, parent, DashPlugin)
+    config.pluginmanager.register(_plugin)
 
 
 ###############################################################################
@@ -95,7 +107,7 @@ def dash_threaded():
     :return:
     """
 
-    with DashThreaded(DashPlugin.driver) as starter:
+    with DashThreaded(_plugin.driver) as starter:
         yield starter
 
 
@@ -107,12 +119,5 @@ def dash_subprocess():
 
     :return:
     """
-    with DashSubprocess(DashPlugin.driver) as starter:
+    with DashSubprocess(_plugin.driver) as starter:
         yield starter
-
-
-# pylint: disable=too-few-public-methods
-class DashPlugin:
-    """Global plugin configuration and driver container"""
-    driver = None
-    configs = {}
