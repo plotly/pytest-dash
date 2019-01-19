@@ -65,14 +65,15 @@ compare: value comparison value
 def _compare(left, comparison, right):
     if comparison.data == 'eq':
         return left == right
-    elif comparison.data == 'lt':
+    if comparison.data == 'lt':
         return left < right
-    elif comparison.data == 'lte':
+    if comparison.data == 'lte':
         return left <= right
-    elif comparison.data == 'gt':
+    if comparison.data == 'gt':
         return left > right
-    elif comparison.data == 'gte':
+    if comparison.data == 'gte':
         return left >= right
+    return False
 
 
 # noinspection PyMethodMayBeStatic
