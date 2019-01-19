@@ -50,6 +50,7 @@ compare: value comparison value
     | "text in" element eq value -> text_equal
     | element ("." NAME)+ comparison value -> prop_compare
     | "style" value "of" element eq value -> style_compare
+    %(comparisons)%
 
 %(custom)%
 
@@ -59,6 +60,7 @@ compare: value comparison value
     | "select by value" input_value element -> select_by_value
     | "select by text" ESCAPED_STRING element -> select_by_text
     | "select by index" NUMBER element -> select_by_index
+    %(commands)%
 
 %import common.CNAME -> NAME
 %import common.NUMBER
@@ -114,7 +116,7 @@ class BehaviorTransformerMeta(type):
                 values.append(key)
             elif behavior.kind == 'comparison':
                 comparisons.append(key)
-            elif behavior.kind == 'commands':
+            elif behavior.kind == 'command':
                 commands.append(key)
 
         grammar = _grammar

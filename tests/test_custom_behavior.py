@@ -14,18 +14,20 @@ def test_custom_behavior(testdir):
             @add_behavior('NUMBER "+" NUMBER')
             def add(n1, n2):
                 return int(n1) + int(n2)
-            
+
             @add_behavior('"Write"i variable "in" element', kind='command')
             def write_command(value, element):
                 # Same as enter in but user defined.
                 element.send_keys(value)
     '''
     )
-    testdir.makeini('''
-    [pytest]
-    webdriver = Chrome
-    log_cli=true
-    ''')
+    testdir.makeini(
+        '''
+        [pytest]
+        webdriver = Chrome
+        log_cli=true
+        '''
+    )
     testdir.makefile(
         '.yml',
         test_additional_behavior='''
