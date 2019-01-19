@@ -35,5 +35,5 @@ def test_custom_behavior(testdir):
             - TestHelloWorld
         '''
     )
-    result = testdir.runpytest()
+    result = testdir.runpytest_subprocess()
     result.assert_outcomes(passed=1)
