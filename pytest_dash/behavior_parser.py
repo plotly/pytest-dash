@@ -61,6 +61,19 @@ compare: value comparison value
 '''
 
 
+def _compare(left, comparison, right):
+    if comparison.data == 'eq':
+        return left == right
+    elif comparison.data == 'lt':
+        return left < right
+    elif comparison.data == 'lte':
+        return left <= right
+    elif comparison.data == 'gt':
+        return left > right
+    elif comparison.data == 'gte':
+        return left >= right
+
+
 # noinspection PyMethodMayBeStatic
 # pylint: disable=no-self-use, missing-docstring, no-member
 @lark.v_args(inline=True)
@@ -108,16 +121,7 @@ class BehaviorTransformer(lark.Transformer):
         return element.get_property(prop)
 
     def compare(self, left, comparison, right):
-        if comparison.data == 'eq':
-            assert left == right
-        elif comparison.data == 'lt':
-            assert left < right
-        elif comparison.data == 'lte':
-            assert left <= right
-        elif comparison.data == 'gt':
-            assert left > right
-        elif comparison.data == 'gte':
-            assert left >= right
+        assert _compare(left, comparison, right)
 
     def clear(self, element):
         element.clear()
