@@ -32,9 +32,21 @@ RadioItemsBehavior:
   outcome:
     - "text in #radio-items-output should be 9"
 
+
+StyleChangeButtonBehavior:
+  description: Test style assertions in behavior tests
+  application:
+    path: test_apps.component_gallery
+  event:
+    - 'style "background-color" of #style-output should be "rgba(255, 0, 0, 1)"'
+    - 'click #change-style'
+  outcome:
+    - 'style "background-color" of #style-output should be "rgba(0, 0, 255, 1)"'
+
 Tests:
   - InputBehavior
   - InputBehavior:
       value: Non default
   - DropdownBehavior
   - RadioItemsBehavior
+  - StyleChangeButtonBehavior

@@ -26,7 +26,13 @@ app.layout = html.Div([
     ),
     html.Div(id='input-output'),
     html.Div(id='dropdown-output'),
-    html.Div(id='radio-items-output')
+    html.Div(id='radio-items-output'),
+    html.Button('change-style', id='change-style'),
+    html.Div(
+        'Style changer',
+        id='style-output',
+        style={'backgroundColor': 'rgba(255, 0, 0, 1)'}
+    )
 ])
 
 for i in (
@@ -43,6 +49,16 @@ for i in (
             raise PreventUpdate
 
         return str(value)
+
+
+@app.callback(
+    Output('style-output', 'style'), [Input('change-style', 'n_clicks')]
+)
+def on_style_change(n_clicks):
+    if n_clicks is None:
+        raise PreventUpdate
+
+    return {'backgroundColor': 'rgba(0, 0, 255, 1)'}
 
 
 if __name__ == '__main__':
