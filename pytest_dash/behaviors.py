@@ -17,6 +17,7 @@ class DashBehaviorTestFile(pytest.File):
 
     def collect(self):
         raw = yaml.safe_load(self.fspath.open())
+        global_application = raw.get('application')
         tests = raw.pop('Tests')
         if not tests:
             raise Exception('No tests definition for the file in')
@@ -24,7 +25,8 @@ class DashBehaviorTestFile(pytest.File):
         for test in tests:
             if isinstance(test, str):
                 yield DashBehaviorTestItem(
-                    self.plugin.driver, test, self, raw.get(test)
+                    self.plugin.driver, test, self, raw.get(test),
+                    global_application
                 )
             else:
                 behavior_name = list(test.keys())[0]
@@ -35,22 +37,24 @@ class DashBehaviorTestFile(pytest.File):
                 )
 
                 yield DashBehaviorTestItem(
-                    self.plugin.driver, test_name, self, behavior, **kwargs
+                    self.plugin.driver, test_name, self, behavior,
+                    global_application, **kwargs
                 )
 
 
 class DashBehaviorTestItem(pytest.Item):
     """A single test of a test file."""
 
-    def __init__(self, driver, name, parent, spec, **kwargs):
+    def __init__(self, driver, name, parent, spec, application=None, **kwargs):
         super(DashBehaviorTestItem, self).__init__(name, parent)
+        self._application = application or {}
         self.driver = driver
         self.spec = spec
         self.parameters = kwargs
 
     # pylint: disable=missing-docstring
     def runtest(self):
-        application = self.spec.get('application', {})
+        application = self.spec.get('application', self._application)
         app_path = application.get('path')
         app_options = application.get('options', {})
         app_port = app_options.get('port', 8050)
