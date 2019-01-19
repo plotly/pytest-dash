@@ -1,8 +1,16 @@
+"""Test custom behaviors"""
+
+
 def test_custom_behavior(testdir):
+    """
+    Test a custom value can be added to the parser.
+
+    :param testdir: testdir fixture
+    :return:
+    """
     testdir.makeconftest(
         '''
         pytest_plugins = ['pytest_dash.plugin']
-        
         def pytest_add_behaviors(add_behavior):
             @add_behavior('NUMBER "+" NUMBER')
             def add(n1, n2):
