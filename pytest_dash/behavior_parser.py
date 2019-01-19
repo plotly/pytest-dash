@@ -87,6 +87,7 @@ class BehaviorTransformerMeta(type):
     Dynamically create a parser transformer with user defined behaviors
     """
 
+    # pylint: disable=too-many-locals
     def __new__(mcs, name, bases, attributes):
         behaviors = attributes.get('_behaviors', {})
         new_attrs = attributes.copy()
@@ -116,18 +117,21 @@ class BehaviorTransformerMeta(type):
             elif behavior.kind == 'commands':
                 commands.append(key)
 
-        new_attrs['grammar'] = _grammar.replace(
-            '%(custom)%', '\n'.join(behaviors_grammar)
-        ).replace(
-            '%(value)%',
-            '| ' + '| '.join(values) if values else '',
-        ).replace(
-            '%(comparisons)%',
-            '| ' + '| '.join(comparisons) if comparisons else '',
-        ).replace(
-            '%(commands)%',
-            '|' + '| '.join(commands) if commands else '',
-        )
+        grammar = _grammar
+        custom_grammars = [
+            ('custom', '\n'.join(behaviors_grammar)),
+            ('value', '| ' + '| '.join(values) if values else ''),
+            (
+                'comparisons',
+                '| ' + '| '.join(comparisons) if comparisons else ''
+            ),
+            ('commands', '|' + '| '.join(commands) if commands else ''),
+        ]
+
+        for key, value in custom_grammars:
+            grammar = grammar.replace('%({})%'.format(key), value)
+
+        new_attrs['grammar'] = grammar
 
         return type.__new__(mcs, name, bases, new_attrs)
 
