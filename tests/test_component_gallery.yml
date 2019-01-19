@@ -1,10 +1,11 @@
+application:
+  path: test_apps.component_gallery
+
 InputBehavior:
   description: Test text can entered/customized in a Input component in behavior tests.
   parameters:
     value:
         default: Input value
-  application:
-    path: test_apps.component_gallery
   event:
     - "enter $value in #input"
   outcome:
@@ -12,8 +13,6 @@ InputBehavior:
 
 DropdownBehavior:
   description: Test that a dropdown value can be selected in behavior tests.
-  application:
-    path: test_apps.component_gallery
   parameters:
     value:
       default: '1'
@@ -25,8 +24,6 @@ DropdownBehavior:
 
 RadioItemsBehavior:
   description: Test radio items value can be changed in behavior tests.
-  application:
-    path: test_apps.component_gallery
   event:
     - 'click {#radio-items > label:nth-child(9) > input[type="radio"]}'
   outcome:
@@ -35,8 +32,6 @@ RadioItemsBehavior:
 
 StyleChangeButtonBehavior:
   description: Test style assertions in behavior tests
-  application:
-    path: test_apps.component_gallery
   event:
     - 'style "background-color" of #style-output should be "rgba(255, 0, 0, 1)"'
     - 'click #change-style'
