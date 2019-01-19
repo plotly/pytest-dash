@@ -45,6 +45,7 @@ jobs:
           name: run tests
           command: |
             . venv/bin/activate
+            pip install -e .
             pytest tests
 
       - store_artifacts:
