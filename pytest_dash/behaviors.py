@@ -25,8 +25,7 @@ class DashBehaviorTestFile(pytest.File):
         for test in tests:
             if isinstance(test, str):
                 yield DashBehaviorTestItem(
-                    self.plugin.driver, test, self, raw.get(test),
-                    global_application
+                    self.plugin, test, self, raw.get(test), global_application
                 )
             else:
                 behavior_name = list(test.keys())[0]
@@ -37,18 +36,19 @@ class DashBehaviorTestFile(pytest.File):
                 )
 
                 yield DashBehaviorTestItem(
-                    self.plugin.driver, test_name, self, behavior,
-                    global_application, **kwargs
+                    self.plugin, test_name, self, behavior, global_application,
+                    **kwargs
                 )
 
 
 class DashBehaviorTestItem(pytest.Item):
     """A single test of a test file."""
 
-    def __init__(self, driver, name, parent, spec, application=None, **kwargs):
+    def __init__(self, plugin, name, parent, spec, application=None, **kwargs):
         super(DashBehaviorTestItem, self).__init__(name, parent)
         self._application = application or {}
-        self.driver = driver
+        self.plugin = plugin
+        self.driver = plugin.driver
         self.spec = spec
         self.parameters = kwargs
 
@@ -65,7 +65,7 @@ class DashBehaviorTestItem(pytest.Item):
             k: self.parameters.get(k, v.get('default'))
             for k, v in parameters.items()
         }
-        parser = parser_factory(self.driver, variables)
+        parser = parser_factory(self.driver, variables, self.plugin.behaviors)
 
         with DashSubprocess(self.driver) as starter:
             starter(app_path, port=app_port)

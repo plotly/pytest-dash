@@ -1,6 +1,8 @@
 """Custom lark parser and transformer for dash behavior tests."""
-import lark
+import functools
+import six
 
+import lark
 from selenium.webdriver.support.ui import Select, WebDriverWait
 
 from pytest_dash.utils import (
@@ -24,6 +26,7 @@ start: compare
 ?value: raw_value
     | element_prop
     | variable
+    %(value)%
 
 ?input_value: raw_value
     | variable
@@ -48,9 +51,11 @@ compare: value comparison value
     | element ("." NAME)+ comparison value -> prop_compare
     | "style" value "of" element eq value -> style_compare
 
+%(custom)%
+
 ?command: "clear" element -> clear
     | "click" element -> click
-    | "enter" input_value "in" element -> send_value
+    | "enter" value "in" element -> send_value
     | "select by value" input_value element -> select_by_value
     | "select by text" ESCAPED_STRING element -> select_by_text
     | "select by index" NUMBER element -> select_by_index
@@ -77,8 +82,59 @@ def _compare(left, comparison, right):
     return False
 
 
+class BehaviorTransformerMeta(type):
+    """
+    Dynamically create a parser transformer with user defined behaviors
+    """
+
+    def __new__(mcs, name, bases, attributes):
+        behaviors = attributes.get('_behaviors', {})
+        new_attrs = attributes.copy()
+        behaviors_grammar = []
+        values = []
+        comparisons = []
+        commands = []
+
+        def wrapper(fun, inline, meta, tree):
+            @functools.wraps(fun)
+            @lark.v_args(inline=inline, meta=meta, tree=tree)
+            # pylint: disable=unused-argument
+            def _wrap(self, *args, **kwargs):
+                return fun(*args, **kwargs)
+
+            return _wrap
+
+        for key, behavior in behaviors.items():
+            new_attrs[key] = wrapper(
+                behavior.handler, behavior.inline, behavior.meta, behavior.tree
+            )
+            behaviors_grammar.append('{}: {}'.format(key, behavior.syntax))
+            if behavior.kind == 'value':
+                values.append(key)
+            elif behavior.kind == 'comparison':
+                comparisons.append(key)
+            elif behavior.kind == 'commands':
+                commands.append(key)
+
+        new_attrs['grammar'] = _grammar.replace(
+            '%(custom)%', '\n'.join(behaviors_grammar)
+        ).replace(
+            '%(value)%',
+            '| ' + '| '.join(values) if values else '',
+        ).replace(
+            '%(comparisons)%',
+            '| ' + '| '.join(comparisons) if comparisons else '',
+        ).replace(
+            '%(commands)%',
+            '|' + '| '.join(commands) if commands else '',
+        )
+
+        return type.__new__(mcs, name, bases, new_attrs)
+
+
 # noinspection PyMethodMayBeStatic
 # pylint: disable=no-self-use, missing-docstring, no-member
+@six.add_metaclass(BehaviorTransformerMeta)
 @lark.v_args(inline=True)
 class BehaviorTransformer(lark.Transformer):
     """Transform and execute behavior commands."""
@@ -173,7 +229,7 @@ class BehaviorTransformer(lark.Transformer):
         WebDriverWait(self.driver, 10).until(_style_compare)
 
 
-def parser_factory(driver, variables=None):
+def parser_factory(driver, variables=None, behaviors=None):
     """
     Create a Lark parser with a BehaviorTransformer with the provided
     selenium driver to find the elements.
@@ -182,9 +238,13 @@ def parser_factory(driver, variables=None):
     :param variables:
     :return:
     """
+
+    class NewBehaviorTransformer(BehaviorTransformer):
+        _behaviors = behaviors or {}
+
     # pylint: disable=no-member
     return lark.Lark(
-        _grammar,
+        NewBehaviorTransformer.grammar,
         parser='lalr',
-        transformer=BehaviorTransformer(driver, variables)
+        transformer=NewBehaviorTransformer(driver, variables)
     )
