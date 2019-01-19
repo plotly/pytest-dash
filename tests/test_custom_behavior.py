@@ -1,4 +1,5 @@
 """Test custom behaviors"""
+import os
 
 
 def test_custom_behavior(testdir):
@@ -8,14 +9,17 @@ def test_custom_behavior(testdir):
     :param testdir: testdir fixture
     :return:
     """
+    cwd = os.getcwd()
     testdir.makeconftest(
         '''
+        import os
+        os.chdir('{}')
         pytest_plugins = ['pytest_dash.plugin']
         def pytest_add_behaviors(add_behavior):
             @add_behavior('NUMBER "+" NUMBER')
             def add(n1, n2):
                 return int(n1) + int(n2)
-    '''
+    '''.format(cwd)
     )
     testdir.makeini('''
     [pytest]
