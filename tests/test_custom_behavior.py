@@ -70,6 +70,7 @@ def test_custom_behavior(testdir):
             - TestContainsBehavior
         '''
     )
-    # result = testdir.runpytest_subprocess()
-    result = testdir.runpytest()
+    result = testdir.runpytest_subprocess()
+    # Comment line up and uncomment line down to debug.
+    # result = testdir.runpytest()
     result.assert_outcomes(passed=3)
