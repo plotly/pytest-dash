@@ -12,6 +12,4 @@ flake8
 sphinx
 yapf
 ruamel.yaml
-lark
 lark-parser
-lazy-object-proxy
