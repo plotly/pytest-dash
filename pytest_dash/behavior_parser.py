@@ -45,6 +45,7 @@ element_prop: element ("." NAME)+
 
 compare: value comparison value
     | "text in" element eq value -> text_equal
+    | element ("." NAME)+ comparison value -> prop_compare
 
 ?command: "clear" element -> clear
     | "click" element -> click
@@ -154,6 +155,13 @@ class BehaviorTransformer(lark.Transformer):
             return element.text == value
 
         WebDriverWait(self.driver, 10).until(_text_equal)
+
+    def prop_compare(self, element, prop, comparison, value):
+        def _prop_compare(_):
+            prop_value = element.get_property(prop)
+            return _compare(prop_value, comparison, value)
+
+        WebDriverWait(self.driver, 10).until(_prop_compare)
 
 
 def parser_factory(driver, variables=None):
