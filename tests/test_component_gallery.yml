@@ -8,8 +8,7 @@ InputBehavior:
   event:
     - "enter $value in #input"
   outcome:
-    - "wait for text to equal $value in #input-output"
-
+    - "text in #input-output should be $value"
 
 DropdownBehavior:
   description: Test that a dropdown value can be selected in behavior tests.
@@ -22,7 +21,7 @@ DropdownBehavior:
     - 'enter $value in {#dropdown .Select-input input}'
     - 'click {#dropdown .Select .Select-menu-outer}'
   outcome:
-    - "wait for text to equal $value in #dropdown-output"
+    - 'text in #dropdown-output should be $value'
 
 RadioItemsBehavior:
   description: Test radio items value can be changed in behavior tests.
@@ -31,7 +30,7 @@ RadioItemsBehavior:
   event:
     - 'click {#radio-items > label:nth-child(9) > input[type="radio"]}'
   outcome:
-    - "wait for text to equal 9 in #radio-items-output"
+    - "text in #radio-items-output should be 9"
 
 Tests:
   - InputBehavior

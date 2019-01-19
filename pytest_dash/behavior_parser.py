@@ -44,6 +44,7 @@ element_prop: element ("." NAME)+
 ?comparison: eq | lt | lte | gt | gte
 
 compare: value comparison value
+    | "text in" element eq value -> text_equal
 
 ?command: "clear" element -> clear
     | "click" element -> click
@@ -51,7 +52,6 @@ compare: value comparison value
     | "select by value" input_value element -> select_by_value
     | "select by text" ESCAPED_STRING element -> select_by_text
     | "select by index" NUMBER element -> select_by_index
-    | "wait for text to equal" value "in" element -> wait_for_text_to_equal
 
 %import common.CNAME -> NAME
 %import common.NUMBER
@@ -143,7 +143,7 @@ class BehaviorTransformer(lark.Transformer):
     def escape_string(self, escaped):
         return escaped.strip('"')
 
-    def wait_for_text_to_equal(self, value, element):
+    def text_equal(self, element, _, value):
         # We have the element and not the selector so we cannot use the
         # wait_for_text wrapper.
         def _text_equal(_):
