@@ -14,7 +14,7 @@ SimpleCallback:
         - "enter $var1 in #value"
     outcome:
         - "#value.value == $var1"
-        - 'wait for text to equal $var1 in {#out}'
+        - 'text in {#out} should be $var1'
 
 Tests:
     - SimpleCallback
