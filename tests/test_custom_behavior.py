@@ -19,6 +19,10 @@ def test_custom_behavior(testdir):
             def write_command(value, element):
                 # Same as enter in but user defined.
                 element.send_keys(value)
+
+            @add_behavior('value "contains" value', kind='comparison')
+            def contains_comparison(v1, v2):
+                assert v2 in v1
     '''
     )
     testdir.makeini(
@@ -48,10 +52,24 @@ def test_custom_behavior(testdir):
                 - 'write $value in #value'
             outcome:
                 - '#value.value should be "printed value"'
+        TestContainsBehavior:
+            application:
+                path: test_apps.component_gallery
+            parameters:
+                container:
+                    default:
+                        - Foo
+                        - Bar
+            event:
+                - 'click #change-style'
+            outcome:
+                - '$container contains "Foo"'
         Tests:
             - TestAdditionBehavior
             - TestWriteCommandBehavior
+            - TestContainsBehavior
         '''
     )
-    result = testdir.runpytest_subprocess()
-    result.assert_outcomes(passed=2)
+    # result = testdir.runpytest_subprocess()
+    result = testdir.runpytest()
+    result.assert_outcomes(passed=3)
