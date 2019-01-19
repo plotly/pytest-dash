@@ -111,11 +111,12 @@ class BehaviorTransformerMeta(type):
             new_attrs[key] = wrapper(
                 behavior.handler, behavior.inline, behavior.meta, behavior.tree
             )
+            if behavior.kind == 'comparison':
+                comparisons.append('{} -> {}'.format(behavior.syntax, key))
+                continue
             behaviors_grammar.append('{}: {}'.format(key, behavior.syntax))
             if behavior.kind == 'value':
                 values.append(key)
-            elif behavior.kind == 'comparison':
-                comparisons.append(key)
             elif behavior.kind == 'command':
                 commands.append(key)
 
