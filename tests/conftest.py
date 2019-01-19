@@ -1,2 +1,2 @@
 # pylint: disable=missing-docstring
-pytest_plugins = ['pytest_dash.plugin']
+pytest_plugins = ['pytester', 'pytest_dash.plugin']
