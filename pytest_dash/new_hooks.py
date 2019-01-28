@@ -4,4 +4,19 @@
 
 
 def pytest_add_behaviors(add_behavior):
-    """Add behavior hook"""
+    """
+    Use this hook to add custom behavior parsing.
+
+    **Example**
+    `conftest.py`
+
+    .. code-block:: python
+
+        def pytest_add_behavior(add_behavior):
+            @add_behavior('Text to parse')
+            def custom_parse_action(params):
+                pass
+
+    :param add_behavior: Decorator for a behavior handler function.
+    :return:
+    """

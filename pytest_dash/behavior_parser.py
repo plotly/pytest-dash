@@ -112,6 +112,8 @@ class BehaviorTransformerMeta(type):
                 behavior.handler, behavior.inline, behavior.meta, behavior.tree
             )
             if behavior.kind == 'comparison':
+                # Custom comparisons need to be assigned the transformer
+                # handler with the arrow inside the compare token.
                 comparisons.append('{} -> {}'.format(behavior.syntax, key))
                 continue
             behaviors_grammar.append('{}: {}'.format(key, behavior.syntax))
@@ -241,8 +243,13 @@ def parser_factory(driver, variables=None, behaviors=None):
     Create a Lark parser with a BehaviorTransformer with the provided
     selenium driver to find the elements.
 
+    A new behavior transformer class is created and behaviors are
+    assigned a transformer function from the supplied behaviors in the
+    pytest_add_behaviors hook.
+
     :param driver: Selenium driver to use when parsing elements.
-    :param variables:
+    :param variables: Variables to use in the parser transformer.
+    :param behaviors: Custom behaviors, come from plugin.behaviors.
     :return:
     """
 
