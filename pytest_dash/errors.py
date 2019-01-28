@@ -15,3 +15,7 @@ class NoAppFoundError(PytestDashError):
 
 class DashAppLoadingError(PytestDashError):
     """The dash app failed to load"""
+
+
+class MissingBehaviorError(PytestDashError):
+    """A behavior was missing from the """

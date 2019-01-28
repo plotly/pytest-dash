@@ -4,6 +4,7 @@ import itertools
 import pytest
 from ruamel import yaml
 
+from pytest_dash import errors
 from pytest_dash.application_runners import DashSubprocess
 from pytest_dash.behavior_parser import parser_factory
 
@@ -20,13 +21,16 @@ class DashBehaviorTestFile(pytest.File):
         global_application = raw.get('application')
         tests = raw.pop('Tests')
         if not tests:
-            raise Exception('No tests definition for the file in')
+            raise errors.PytestDashError(
+                'No tests defined for {}'.format(self.fspath)
+            )
 
         for test in tests:
+            kwargs = {}
+            test_name = test
+
             if isinstance(test, str):
-                yield DashBehaviorTestItem(
-                    self.plugin, test, self, raw.get(test), global_application
-                )
+                behavior = raw.get(test)
             else:
                 behavior_name = list(test.keys())[0]
                 behavior = raw.get(behavior_name)
@@ -35,10 +39,15 @@ class DashBehaviorTestFile(pytest.File):
                     '[{}={}]'.format(k, v) for k, v in kwargs.items()
                 )
 
-                yield DashBehaviorTestItem(
-                    self.plugin, test_name, self, behavior, global_application,
-                    **kwargs
+            if not behavior:
+                raise errors.MissingBehaviorError(
+                    'Behavior not found: {}'.format(test_name)
                 )
+
+            yield DashBehaviorTestItem(
+                self.plugin, test_name, self, behavior, global_application,
+                **kwargs
+            )
 
 
 class DashBehaviorTestItem(pytest.Item):
