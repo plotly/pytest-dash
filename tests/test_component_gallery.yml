@@ -28,6 +28,7 @@ RadioItemsBehavior:
     - 'click {#radio-items > label:nth-child(9) > input[type="radio"]}'
   outcome:
     - "text in #radio-items-output should be 9"
+    - 'expect {#radio-items > label:nth-child(9) > input[type="radio"]}.checked to be true'
 
 
 StyleChangeButtonBehavior:
