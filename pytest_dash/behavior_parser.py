@@ -50,6 +50,8 @@ compare: value comparison value
     | "text in" element eq value -> text_equal
     | element ("." NAME)+ comparison value -> prop_compare
     | "style" value "of" element eq value -> style_compare
+    | "expect" value "to be true" -> truthy
+    | "expect" value "to be false" -> falsy
     %(comparisons)%
 
 %(custom)%
@@ -190,6 +192,12 @@ class BehaviorTransformer(lark.Transformer):
 
     def compare(self, left, comparison, right):
         assert _compare(left, comparison, right)
+
+    def truthy(self, value):
+        assert value
+
+    def falsy(self, value):
+        assert not value
 
     def clear(self, element):
         element.clear()
