@@ -156,7 +156,7 @@ class BehaviorTransformerMeta(type):
 
 
 # noinspection PyMethodMayBeStatic
-# pylint: disable=no-self-use, missing-docstring, no-member
+# pylint: disable=no-self-use, missing-docstring, no-member, R0904
 @six.add_metaclass(BehaviorTransformerMeta)
 @lark.v_args(inline=True)
 class BehaviorTransformer(lark.Transformer):
@@ -285,8 +285,8 @@ class BehaviorTransformer(lark.Transformer):
         :kind: command
         """
         if isinstance(element, list):
-            for e in element:
-                e.click()
+            for elem in element:
+                elem.click()
         else:
             element.click()
 
