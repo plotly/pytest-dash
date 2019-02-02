@@ -77,6 +77,14 @@ def wait_for_element_by_xpath(driver, xpath, timeout=10):
     return _wait_for_element(driver, By.XPATH, xpath, timeout=timeout)
 
 
+def wait_for_elements_by_xpath(driver, xpath, timeout=10):
+    return _wait_for(
+        driver,
+        EC.presence_of_all_elements_located((By.XPATH, xpath)),
+        timeout=timeout
+    )
+
+
 def wait_for_element_by_id(driver, _id, timeout=10):
     """
     Wait until a single element is found and return it.
