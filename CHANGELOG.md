@@ -4,16 +4,21 @@ Versions follow [Semantic Versioning](https://www.semver.org)
 
 ## [2.0.0] UNRELEASED
 ### Added
-- Behavior tests from yaml description.
+- Behavior tests from yaml description. [#54](https://github.com/T4rk1n/pytest-dash/pull/54)
 - Plugin configuration hooks for selenium options (Currently only `webdriver`)
     - Configuration from commandline
     - Configuration from pytest.ini file.
+- Added xpath wait_for wrappers.
+- Added wait_for wrappers for multi elements find.
+- Customizable behavior parsing thru `pytest_add_behavior` hook.
 
 ### Changed
 - Application runners (dash_threaded, dash_subprocess) refactored to a context manager with own selenium driver.
+- Driver argument changed to `--webdriver`
 
 ### Fixed
 - dash_threaded now wait til the server has stopped in teardown.
+- server runners now properly closes if there's an error in initialization. Fixes [#57](https://github.com/T4rk1n/pytest-dash/issues/57)
 
 ### Breaking Changes
 #### Removed
