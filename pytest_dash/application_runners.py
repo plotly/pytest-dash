@@ -52,6 +52,12 @@ class BaseDashRunner:
     """Base context manager class for running applications."""
 
     def __init__(self, driver, keep_open=False):
+        """
+        :param driver: Selenium driver
+        :type driver: selenium.webdriver.remote.webdriver.WebDriver
+        :param keep_open: Keep the server open
+        :type keep_open: bool
+        """
         self.driver = driver
         self.port = 8050
         self.started = False
