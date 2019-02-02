@@ -138,7 +138,7 @@ class BehaviorTransformerMeta(type):
         for key, value in custom_grammars:
             grammar = grammar.replace('%({})%'.format(key), value)
 
-        new_attrs['grammar'] = grammar
+        new_attrs['_grammar'] = grammar
 
         return type.__new__(mcs, name, bases, new_attrs)
 
@@ -264,9 +264,10 @@ def parser_factory(driver, variables=None, behaviors=None):
     class NewBehaviorTransformer(BehaviorTransformer):
         _behaviors = behaviors or {}
 
-    # pylint: disable=no-member
+    # pylint: disable=no-member, protected-access
+    # noinspection PyProtectedMember
     return lark.Lark(
-        NewBehaviorTransformer.grammar,
+        NewBehaviorTransformer._grammar,
         parser='lalr',
         transformer=NewBehaviorTransformer(driver, variables)
     )
