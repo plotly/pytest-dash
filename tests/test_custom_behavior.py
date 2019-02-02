@@ -41,7 +41,7 @@ def test_custom_behavior(testdir):
             event:
                 - 'enter 2 + 2 in #value'
             outcome:
-                - '#value.value should be 4'
+                - '#value.value should be "4"'
         TestWriteCommandBehavior:
             application:
                 path: test_apps.simple_app
