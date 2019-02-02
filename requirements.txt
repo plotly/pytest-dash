@@ -1,6 +1,7 @@
-dash
-dash-html-components
-dash-core-components
+dash==0.36.0
+dash-html-components==0.13.4
+dash-core-components==0.43.0
+dash-renderer==0.17.0
 selenium
 pytest
 requests
