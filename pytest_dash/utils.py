@@ -78,6 +78,19 @@ def wait_for_element_by_xpath(driver, xpath, timeout=10):
 
 
 def wait_for_elements_by_xpath(driver, xpath, timeout=10):
+    """
+    Wait until all are found before the timeout.
+    This variant use xpath to find the elements.
+    https://www.w3schools.com/xml/xml_xpath.asp
+
+    :param driver: Selenium driver
+    :type driver: selenium.webdriver.remote.webdriver.WebDriver
+    :param xpath: Xpath query string.
+    :type xpath: str
+    :param timeout: Maximum time to find the element.
+    :type timeout: float
+    :return:
+    """
     return _wait_for(
         driver,
         EC.presence_of_all_elements_located((By.XPATH, xpath)),

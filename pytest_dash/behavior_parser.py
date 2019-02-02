@@ -250,11 +250,23 @@ class BehaviorTransformer(lark.Transformer):
         return element.get_property(prop)
 
     def element_xpath(self, xpath):
+        """
+        Find an element by xpath
+
+        :Example: ``[//div/span]``
+        :kind: value
+        """
         return wait_for_element_by_xpath(
             self.driver, xpath[1:-1]
         )
 
     def elements_xpath(self, xpath):
+        """
+        Find all elements by xpath
+
+        :Example: ``*[//div/span]``
+        :kind: value
+        """
         return wait_for_elements_by_xpath(
             self.driver, xpath[2:-1]
         )
