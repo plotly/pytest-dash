@@ -6,10 +6,8 @@ import lark
 from selenium.webdriver.support.ui import Select, WebDriverWait
 
 from pytest_dash.utils import (
-    wait_for_element_by_id,
-    wait_for_element_by_css_selector,
-    wait_for_elements_by_css_selector,
-    wait_for_element_by_xpath,
+    wait_for_element_by_id, wait_for_element_by_css_selector,
+    wait_for_elements_by_css_selector, wait_for_element_by_xpath,
     wait_for_elements_by_xpath
 )
 
@@ -224,10 +222,7 @@ class BehaviorTransformer(lark.Transformer):
         )
 
     def elements_selector(self, selector):
-        return wait_for_elements_by_css_selector(
-            self.driver,
-            selector[2:-1]
-        )
+        return wait_for_elements_by_css_selector(self.driver, selector[2:-1])
 
     def elements(self, elements):
         return elements
@@ -256,9 +251,7 @@ class BehaviorTransformer(lark.Transformer):
         :Example: ``[//div/span]``
         :kind: value
         """
-        return wait_for_element_by_xpath(
-            self.driver, xpath[1:-1]
-        )
+        return wait_for_element_by_xpath(self.driver, xpath[1:-1])
 
     def elements_xpath(self, xpath):
         """
@@ -267,9 +260,7 @@ class BehaviorTransformer(lark.Transformer):
         :Example: ``*[//div/span]``
         :kind: value
         """
-        return wait_for_elements_by_xpath(
-            self.driver, xpath[2:-1]
-        )
+        return wait_for_elements_by_xpath(self.driver, xpath[2:-1])
 
     def compare(self, left, comparison, right):
         assert _compare(left, comparison, right)
@@ -353,6 +344,7 @@ class BehaviorTransformer(lark.Transformer):
         :Example: ``#output.id should be "my-element"``
         :kind: comparison
         """
+
         def _prop_compare(_):
             prop_value = element.get_property(prop)
             return _compare(prop_value, comparison, value)
@@ -374,6 +366,7 @@ class BehaviorTransformer(lark.Transformer):
         :param value: Value to compare to the element style attribute.
         :return:
         """
+
         def _style_compare(_):
             style_value = element.value_of_css_property(style)
             return style_value == value

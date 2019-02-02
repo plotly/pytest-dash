@@ -37,7 +37,8 @@ app.layout = html.Div([
         html.Button('btn-1', id='btn-1'),
         html.Button('btn-2', id='btn-2'),
         html.Button('btn-3', id='btn-3'),
-    ], id='multi-elements-click'),
+    ],
+             id='multi-elements-click'),
     html.Div(id='multi-elements-outputs')
 ])
 
