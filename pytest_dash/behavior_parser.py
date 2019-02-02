@@ -8,6 +8,7 @@ from selenium.webdriver.support.ui import Select, WebDriverWait
 from pytest_dash.utils import (
     wait_for_element_by_id,
     wait_for_element_by_css_selector,
+    wait_for_elements_by_css_selector,
 )
 
 _grammar = r'''
@@ -17,7 +18,7 @@ start: compare
 // Variable to use from the parameters
 ?variable: /\$[a-zA-Z0-9_]+/ -> variable
 
-?raw_value: NUMBER
+?raw_value: NUMBER -> number
     | ESCAPED_STRING -> escape_string
     | "true"i -> true
     | "false"i -> false
@@ -25,6 +26,7 @@ start: compare
 
 ?value: raw_value
     | element_prop
+    | elements_length
     | variable
     %(value)%
 
@@ -34,8 +36,12 @@ start: compare
 // Elements
 element_id: /#[a-zA-Z0-9\-_]+/
 element_selector: /\{.*\}/
+elements_selector: /\*\{.*\}/
 element: element_id | element_selector
 element_prop: element ("." NAME)+
+
+elements: elements_selector
+elements_length: elements ".length"
 
 // Comparisons
 ?eq: "should be"i | "eq" | "=="
@@ -56,8 +62,10 @@ compare: value comparison value
 
 %(custom)%
 
-?command: "clear" element -> clear
-    | "click" element -> click
+?elemental: element | elements_selector
+
+?command: "clear" elemental -> clear
+    | "click" elemental -> click
     | "enter" value "in" element -> send_value
     | "select by value" input_value element -> select_by_value
     | "select by text" ESCAPED_STRING element -> select_by_text
@@ -184,6 +192,9 @@ class BehaviorTransformer(lark.Transformer):
         """
         return self.variables.get(name.lstrip('$'))
 
+    def number(self, num):
+        return float(num) if '.' in num else int(num)
+
     def element_id(self, element_id):
         """
         Find an element by id when found in the tree.
@@ -207,6 +218,18 @@ class BehaviorTransformer(lark.Transformer):
             self.driver,
             selector.lstrip('{').rstrip('}')
         )
+
+    def elements_selector(self, selector):
+        return wait_for_elements_by_css_selector(
+            self.driver,
+            selector[2:-1]
+        )
+
+    def elements(self, elements):
+        return elements
+
+    def elements_length(self, elements):
+        return len(elements)
 
     def element(self, identifier):
         # Just need to return the element that is already found
@@ -247,7 +270,11 @@ class BehaviorTransformer(lark.Transformer):
         :Example: ``click #element``
         :kind: command
         """
-        element.click()
+        if isinstance(element, list):
+            for e in element:
+                e.click()
+        else:
+            element.click()
 
     def send_value(self, value, element):
         """
