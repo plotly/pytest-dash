@@ -45,6 +45,13 @@ MultiElementsBehavior:
   outcome:
     - '*{#multi-elements-outputs > span}.length == 3'
 
+XpathBehavior:
+  description: Test xpath element find.
+  event:
+    - 'click [//*[@id="btn-1"]]'
+  outcome:
+    - '*[//div[@id="multi-elements-outputs"]/span].length should be 1'
+
 Tests:
   - InputBehavior
   - InputBehavior:
@@ -53,3 +60,4 @@ Tests:
   - RadioItemsBehavior
   - StyleChangeButtonBehavior
   - MultiElementsBehavior
+  - XpathBehavior
