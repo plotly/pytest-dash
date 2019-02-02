@@ -159,14 +159,38 @@ class BehaviorTransformer(lark.Transformer):
         self.variables = variables or {}
 
     def variable(self, name):
+        """
+        A variable specified in the parameters attribute of behavior.
+
+        :Example:
+
+        .. code-block:: yaml
+
+            ValueBehavior:
+              parameters:
+                value:
+                    default: Foo
+              event:
+                - "enter $value in #input"
+              outcome:
+                - "text in #input-output should be $value"
+
+            Tests:
+                ValueBehavior
+                ValueBehavior:
+                    - value: Bar
+
+        :kind: value
+        """
         return self.variables.get(name.lstrip('$'))
 
     def element_id(self, element_id):
         """
         Find an element by id when found in the tree.
 
-        :param element_id:
-        :return:
+        :Example: ``#dropdown``
+        :kind: value
+        :param element_id: Text after `#`
         """
         return wait_for_element_by_id(self.driver, element_id.replace('#', ''))
 
@@ -174,8 +198,10 @@ class BehaviorTransformer(lark.Transformer):
         """
         Find an element by selector when found in the tree.
 
-        :param selector:
-        :return:
+        :Example: ``{#radio-items > label:nth-child(9) > input[type="radio"]}``
+
+        :kind: value
+        :param selector: Text contained between `{` & `}`
         """
         return wait_for_element_by_css_selector(
             self.driver,
@@ -188,6 +214,12 @@ class BehaviorTransformer(lark.Transformer):
         return identifier
 
     def element_prop(self, element, prop):
+        """
+        Property value of an element
+
+        :Example: ``#element.prop``
+        :kind: value
+        """
         return element.get_property(prop)
 
     def compare(self, left, comparison, right):
@@ -200,12 +232,30 @@ class BehaviorTransformer(lark.Transformer):
         assert not value
 
     def clear(self, element):
+        """
+        Clear an element.
+
+        :Example: ``clear #element``
+        :kind: command
+        """
         element.clear()
 
     def click(self, element):
+        """
+        Click an element.
+
+        :Example: ``click #element``
+        :kind: command
+        """
         element.click()
 
     def send_value(self, value, element):
+        """
+        Send key inputs to the element
+
+        :Example: ``enter "Hello" in #input``
+        :kind: command
+        """
         element.send_keys(value)
 
     def select_by_value(self, value, element):
@@ -221,9 +271,21 @@ class BehaviorTransformer(lark.Transformer):
         select.select_by_index(index)
 
     def escape_string(self, escaped):
+        """
+        Escaped string handler, remove the ``"`` from the token.
+
+        :kind: value
+        """
         return escaped.strip('"')
 
     def text_equal(self, element, _, value):
+        """
+        Assert the text attribute of an element is equal with a wait timer.
+
+        :Example: ``text #output should be "Foo bar"``
+        :kind: comparison
+        """
+
         # We have the element and not the selector so we cannot use the
         # wait_for_text wrapper.
         def _text_equal(_):
@@ -232,6 +294,12 @@ class BehaviorTransformer(lark.Transformer):
         WebDriverWait(self.driver, 10).until(_text_equal)
 
     def prop_compare(self, element, prop, comparison, value):
+        """
+        Wait for a property to equal a value.
+
+        :Example: ``#output.id should be "my-element"``
+        :kind: comparison
+        """
         def _prop_compare(_):
             prop_value = element.get_property(prop)
             return _compare(prop_value, comparison, value)
@@ -239,6 +307,20 @@ class BehaviorTransformer(lark.Transformer):
         WebDriverWait(self.driver, 10).until(_prop_compare)
 
     def style_compare(self, style, element, _, value):
+        """
+        Compare a style value of an of element.
+
+        :Example:
+
+            style "color" of #style should be "rgba(0, 0, 255, 1)"
+
+        :kind: comparison
+        :param style: Name of the style property
+        :param element: Element to find
+        :param _: eq
+        :param value: Value to compare to the element style attribute.
+        :return:
+        """
         def _style_compare(_):
             style_value = element.value_of_css_property(style)
             return style_value == value
