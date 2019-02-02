@@ -10,7 +10,9 @@ import sys
 import flask
 import requests
 
-from pytest_dash.errors import NoAppFoundError, DashAppLoadingError
+from selenium.webdriver.support.wait import WebDriverWait
+
+from pytest_dash import errors
 from pytest_dash.utils import _wait_for_client_app_started
 
 
@@ -18,6 +20,16 @@ def _stop_server():
     stopper = flask.request.environ['werkzeug.server.shutdown']
     stopper()
     return 'stop'
+
+
+def _assert_closed(driver):
+    driver.refresh()
+    body = driver.find_element_by_css_selector('body').text
+    return 'This site can’t be reached' in body
+
+
+def _handle_error(_):
+    _stop_server()
 
 
 def import_app(app_file):
@@ -42,7 +54,7 @@ def import_app(app_file):
         app_module = runpy.run_module(app_file)
         app = app_module['app']
     except KeyError:
-        raise NoAppFoundError(
+        raise errors.NoAppFoundError(
             'No dash `app` instance was found in {}'.format(app_file)
         )
     return app
@@ -90,6 +102,12 @@ class BaseDashRunner:
     def __exit__(self, exc_type, exc_val, exc_tb):
         if self.started and not self.keep_open:
             self.stop()
+            try:
+                WebDriverWait(self.driver, 10).until(_assert_closed)
+            except TimeoutError:
+                raise errors.ServerCloseError(
+                    'Could not stop server (port={})'.format(self.port)
+                )
 
     @property
     def url(self):
@@ -126,6 +144,7 @@ class DashThreaded(BaseDashRunner):
         """
         app.server.add_url_rule(self.stop_route, self.stop_route, _stop_server)
         self.port = port
+        app.server.errorhandler(500)(_handle_error)
 
         def run():
             app.scripts.config.serve_locally = True
@@ -136,10 +155,15 @@ class DashThreaded(BaseDashRunner):
 
         self.thread.daemon = True
         self.thread.start()
-        _wait_for_client_app_started(
-            self.driver, self.url, start_wait_time, start_timeout
-        )
-        self.started = True
+        try:
+            _wait_for_client_app_started(
+                self.driver, self.url, start_wait_time, start_timeout
+            )
+        except errors.DashAppLoadingError:
+            self.started = self.thread.is_alive()
+            raise
+        else:
+            self.started = True
 
         return app
 
@@ -185,18 +209,14 @@ class DashSubprocess(BaseDashRunner):
 
         try:
             _wait_for_client_app_started(self.driver, url)
-        except DashAppLoadingError:
+        except errors.DashAppLoadingError:
             status = self.process.poll()
-            out, err = self.process.communicate()
             print(
                 '\nDash subprocess: {} Failed with status: {}'.format(
                     cmd, status
                 )
             )
-            if out:
-                print(out.decode(), file=sys.stderr)
-            if err:
-                print(err.decode(), file=sys.stderr)
+            self.started = status is None
             raise
         else:
             self.started = True
@@ -205,3 +225,8 @@ class DashSubprocess(BaseDashRunner):
         self.process.kill()
         while not self.process.poll():
             time.sleep(0.01)
+        out, err = self.process.communicate()
+        if out:
+            print(out.decode(), file=sys.stderr)
+        if err:
+            print(err.decode(), file=sys.stderr)

@@ -19,3 +19,7 @@ class DashAppLoadingError(PytestDashError):
 
 class MissingBehaviorError(PytestDashError):
     """A behavior was missing from the """
+
+
+class ServerCloseError(PytestDashError):
+    """Pytest-dash had trouble closing a server."""
