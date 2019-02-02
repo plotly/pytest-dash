@@ -30,7 +30,6 @@ RadioItemsBehavior:
     - "text in #radio-items-output should be 9"
     - 'expect {#radio-items > label:nth-child(9) > input[type="radio"]}.checked to be true'
 
-
 StyleChangeButtonBehavior:
   description: Test style assertions in behavior tests
   event:
@@ -39,6 +38,13 @@ StyleChangeButtonBehavior:
   outcome:
     - 'style "background-color" of #style-output should be "rgba(0, 0, 255, 1)"'
 
+MultiElementsBehavior:
+  description: Test multiple elements found.
+  event:
+    - 'click *{#multi-elements-click > button}'
+  outcome:
+    - '*{#multi-elements-outputs > span}.length == 3'
+
 Tests:
   - InputBehavior
   - InputBehavior:
@@ -46,3 +52,4 @@ Tests:
   - DropdownBehavior
   - RadioItemsBehavior
   - StyleChangeButtonBehavior
+  - MultiElementsBehavior
