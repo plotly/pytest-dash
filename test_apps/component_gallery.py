@@ -33,12 +33,14 @@ app.layout = html.Div([
         id='style-output',
         style={'backgroundColor': 'rgba(255, 0, 0, 1)'}
     ),
-    html.Div([
-        html.Button('btn-1', id='btn-1'),
-        html.Button('btn-2', id='btn-2'),
-        html.Button('btn-3', id='btn-3'),
-    ],
-             id='multi-elements-click'),
+    html.Div(
+        id='multi-elements-click',
+        children=[
+            html.Button('btn-1', id='btn-1'),
+            html.Button('btn-2', id='btn-2'),
+            html.Button('btn-3', id='btn-3'),
+        ]
+    ),
     html.Div(id='multi-elements-outputs')
 ])
 
@@ -72,8 +74,8 @@ def on_style_change(n_clicks):
     Output('multi-elements-outputs', 'children'),
     [Input('btn-{}'.format(x), 'n_clicks') for x in range(1, 4)],
 )
-def on_multi_click(n1, n2, n3):
-    return [html.Span(x) for x in [n1, n2, n3] if x]
+def on_multi_click(*args):
+    return [html.Span(x) for x in args if x]
 
 
 if __name__ == '__main__':
