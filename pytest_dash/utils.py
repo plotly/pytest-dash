@@ -189,8 +189,8 @@ def _wait_for_client_app_started(driver, url, wait_time=0.5, timeout=10):
     # Wait until the #_dash-app-content element is loaded.
     start_time = time.time()
     loading_errors = (
-        'error loading layout',
-        'error loading dependencies',
+        'Error loading layout',
+        'Error loading dependencies',
         'Internal Server Error',
     )
     while True:
