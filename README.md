@@ -3,6 +3,7 @@
 [Pytest][2] fixtures for [dash][1].
 
 [![CircleCI](https://circleci.com/gh/T4rk1n/pytest-dash.svg?style=svg)](https://circleci.com/gh/T4rk1n/pytest-dash)
+[![Documentation Status](https://readthedocs.org/projects/pytest-dash/badge/?version=latest)](https://pytest-dash.readthedocs.io/en/latest/?badge=latest)
 
 ## Install
 
@@ -84,7 +85,9 @@ Helper methods.
 
 - [Dash user guide](https://dash.plot.ly/)
 - [Pytest][2]
+- [Documentation][3]
 
 
 [1]: https://github.com/plotly/dash
 [2]: https://github.com/pytest-dev/pytest
+[3]: https://pytest-dash.readthedocs.io/en/latest/
