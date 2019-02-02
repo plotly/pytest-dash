@@ -5,7 +5,6 @@ except ImportError:
     # noinspection PyUnresolvedReferences
     from Queue import Queue
 
-import pytest
 import dash
 from dash.dependencies import Output, Input
 from dash.exceptions import PreventUpdate
@@ -49,9 +48,6 @@ def test_dash_threaded(dash_threaded):
     assert call_count.qsize() == 7
 
 
-@pytest.mark.skipif(
-    'os.environ.get("CIRCLECI")', reason='Bugged because of #15'
-)
 def test_imported_app(dash_threaded):
     app = import_app('test_apps.simple_app')
     dash_threaded(app)
