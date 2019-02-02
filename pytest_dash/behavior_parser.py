@@ -333,7 +333,7 @@ class BehaviorTransformer(lark.Transformer):
         # We have the element and not the selector so we cannot use the
         # wait_for_text wrapper.
         def _text_equal(_):
-            return element.text == value
+            return element.text == str(value)
 
         WebDriverWait(self.driver, 10).until(_text_equal)
 
