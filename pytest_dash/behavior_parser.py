@@ -9,6 +9,8 @@ from pytest_dash.utils import (
     wait_for_element_by_id,
     wait_for_element_by_css_selector,
     wait_for_elements_by_css_selector,
+    wait_for_element_by_xpath,
+    wait_for_elements_by_xpath
 )
 
 _grammar = r'''
@@ -37,10 +39,12 @@ start: compare
 element_id: /#[a-zA-Z0-9\-_]+/
 element_selector: /\{.*\}/
 elements_selector: /\*\{.*\}/
-element: element_id | element_selector
+element: element_id | element_selector | element_xpath
 element_prop: element ("." NAME)+
+element_xpath: /\[.*\]/
+elements_xpath: /\*\[.*\]/
 
-elements: elements_selector
+elements: elements_selector | elements_xpath
 elements_length: elements ".length"
 
 // Comparisons
@@ -244,6 +248,16 @@ class BehaviorTransformer(lark.Transformer):
         :kind: value
         """
         return element.get_property(prop)
+
+    def element_xpath(self, xpath):
+        return wait_for_element_by_xpath(
+            self.driver, xpath[1:-1]
+        )
+
+    def elements_xpath(self, xpath):
+        return wait_for_elements_by_xpath(
+            self.driver, xpath[2:-1]
+        )
 
     def compare(self, left, comparison, right):
         assert _compare(left, comparison, right)
