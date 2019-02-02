@@ -41,6 +41,25 @@ def wait_for_element_by_css_selector(driver, selector, timeout=10.0):
     )
 
 
+def wait_for_elements_by_css_selector(driver, selector, timeout=10.0):
+    """
+    Wait until all elements are found by the selector before the timeout.
+
+    :param driver: Selenium driver
+    :type driver: selenium.webdriver.remote.webdriver.WebDriver
+    :param selector: Search for elements
+    :type selector: str
+    :param timeout: Maximum wait time
+    :type timeout: float
+    :return: Found elements
+    """
+    return _wait_for(
+        driver,
+        EC.presence_of_all_elements_located((By.CSS_SELECTOR, selector)),
+        timeout=timeout
+    )
+
+
 def wait_for_element_by_xpath(driver, xpath, timeout=10):
     """
     Wait until a single element is found and return it.
