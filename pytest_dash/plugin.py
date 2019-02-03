@@ -6,7 +6,7 @@ Main entry point for pytest
 - Hooks definitions
 - Plugin config container
 - Plugin selenium driver
-- Fixtures imports
+- Fixtures
 """
 import pytest
 
@@ -54,7 +54,7 @@ def pytest_addoption(parser):
 
 # pylint: disable=too-few-public-methods
 class DashPlugin(object):
-    """Global plugin configuration and driver container"""
+    """Plugin configuration and selenium driver container"""
 
     def __init__(self):
         self.driver = None
@@ -137,7 +137,19 @@ def dash_threaded():
     """
     Start a local dash server in a new thread. Stop the server in teardown.
 
-    :return:
+    :Example:
+
+    .. code-block:: python
+
+        import dash
+        import dash_html_components as html
+
+        def test_application(dash_threaded):
+            app = dash.Dash(__name__)
+            app.layout = html.Div('My app)
+            dash_threaded(app)
+
+    .. seealso:: :py:class:`pytest_dash.application_runners.DashThreaded`
     """
 
     with DashThreaded(_plugin.driver) as starter:
@@ -148,9 +160,16 @@ def dash_threaded():
 def dash_subprocess():
     """
     Start a Dash server with subprocess.Popen and waitress-serve.
-    No instance is returned from this fixture.
 
-    :return:
+    :Example:
+
+    .. code-block:: python
+
+        def test_application(dash_subprocess):
+            # consider the application file is named `app.py`
+            dash_subprocess('app')
+
+    .. seealso:: :py:class:`pytest_dash.application_runners.DashSubprocess`
     """
     with DashSubprocess(_plugin.driver) as starter:
         yield starter
