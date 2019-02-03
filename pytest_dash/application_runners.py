@@ -13,7 +13,7 @@ import requests
 from selenium.webdriver.support.wait import WebDriverWait
 
 from pytest_dash import errors
-from pytest_dash.utils import _wait_for_client_app_started
+from pytest_dash.wait_for import _wait_for_client_app_started
 
 
 def _stop_server():

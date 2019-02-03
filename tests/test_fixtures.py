@@ -11,7 +11,7 @@ from dash.exceptions import PreventUpdate
 import dash_html_components as html
 
 # pylint: disable=unused-import
-from pytest_dash.utils import \
+from pytest_dash.wait_for import \
     wait_for_text_to_equal, wait_for_element_by_css_selector
 from pytest_dash.application_runners import import_app
 

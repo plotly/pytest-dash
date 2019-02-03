@@ -5,7 +5,7 @@ import six
 import lark
 from selenium.webdriver.support.ui import Select, WebDriverWait
 
-from pytest_dash.utils import (
+from pytest_dash.wait_for import (
     wait_for_element_by_id, wait_for_element_by_css_selector,
     wait_for_elements_by_css_selector, wait_for_element_by_xpath,
     wait_for_elements_by_xpath

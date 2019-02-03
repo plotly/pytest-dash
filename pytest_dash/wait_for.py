@@ -1,4 +1,4 @@
-"""Utils methods for pytest-dash such wait_for wrappers and import_app."""
+"""Utils methods for pytest-dash such wait_for wrappers"""
 import pprint
 import time
 
