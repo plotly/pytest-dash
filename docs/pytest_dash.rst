@@ -52,10 +52,10 @@ pytest\_dash.plugin module
     :undoc-members:
     :show-inheritance:
 
-pytest\_dash.utils module
--------------------------
+pytest\_dash.wait\_for module
+-----------------------------
 
-.. automodule:: pytest_dash.utils
+.. automodule:: pytest_dash.wait_for
     :members:
     :undoc-members:
     :show-inheritance:

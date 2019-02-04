@@ -1,0 +1,16 @@
+<h3><a href="{{ pathto(master_doc) }}">{{ _('Table Of Contents') }}</a></h3>
+
+<ul>
+  <li><a href="{{ pathto('index') }}">Home</a></li>
+  <li><a href="{{ pathto('contents') }}">Contents</a></li>
+  <li><a href="{{ pathto('usage') }}">Usage</a></li>
+  <li><a href="{{ pathto('modules') }}">Reference</a></li>
+  <li><a href="{{ pathto('changelog') }}">Changelog</a></li>
+  <li><a href="{{ pathto('contributing') }}">Contributing</a></li>
+  <li><a href="{{ pathto('license') }}">License</a></li>
+</ul>
+
+{%- if display_toc %}
+  <hr>
+  {{ toc }}
+{%- endif %}

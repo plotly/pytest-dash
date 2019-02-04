@@ -1,15 +1,3 @@
-Welcome to pytest-dash's documentation!
-=======================================
+:orphan:
 
-.. toctree::
-   :maxdepth: 2
-   :caption: Contents:
-
-   modules
-
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
+.. mdinclude:: ../README.md
