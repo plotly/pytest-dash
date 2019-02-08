@@ -8,3 +8,4 @@ exclude =
     .circleci,
     .idea,
     pytest_dash.egg-info
+    docs
