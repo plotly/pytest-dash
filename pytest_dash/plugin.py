@@ -57,9 +57,10 @@ class DashPlugin(object):
     """Plugin configuration and selenium driver container"""
 
     def __init__(self):
-        self.driver = None
+        self._driver = None
         self.config = None
         self.behaviors = {}
+        self._driver_name = None
 
     # pylint: disable=missing-docstring
     def pytest_configure(self, config):
@@ -67,15 +68,7 @@ class DashPlugin(object):
         # Called once before the tests are run
         # Get and configure global objects for the plugin to use.
         # TODO get all the options and map a global dict.
-        driver_name = _get_config(config, 'webdriver')
-
-        if driver_name not in _driver_map:
-            raise InvalidDriverError(
-                '{} is not a valid webdriver value.\n'
-                'Valid drivers {}'.format(driver_name, _driver_map.keys())
-            )
-
-        self.driver = _driver_map.get(driver_name)()
+        self._driver_name = _get_config(config, 'webdriver')
 
         # pylint: disable=invalid-name, no-self-argument
         class _AddBehavior:
@@ -100,12 +93,28 @@ class DashPlugin(object):
     # pylint: disable=unused-argument, missing-docstring
     def pytest_unconfigure(self, config):
         # Quit the selenium driver once all tests are cleared.
-        self.driver.quit()
+        if self._driver:
+            self.driver.quit()
 
     # pylint: disable=inconsistent-return-statements, missing-docstring
     def pytest_collect_file(self, parent, path):
         if path.ext == ".yml" and path.basename.startswith("test"):
             return DashBehaviorTestFile(path, parent, self)
+
+    @property
+    def driver(self):
+        if not self._driver:
+            if self._driver_name not in _driver_map:
+                raise InvalidDriverError(
+                    '{} is not a valid webdriver value.\n'
+                    'Valid drivers {}'.format(
+                        self._driver_name, _driver_map.keys()
+                    )
+                )
+
+            self._driver = _driver_map.get(self._driver_name)()
+
+        return self._driver
 
 
 _plugin = DashPlugin()
