@@ -157,57 +157,75 @@ There is 3 kind of rule for the grammar:
     *   - Rule
         - Kind
         - Example
+        - Description
     *   - element_id
         - value
         - ``#my-element-id``
+        - Find a single element by id
     *   - element_selector
         - value
         - ``{#my-element-id > span}``
+        - Find a single by selector
     *   - elements_selector
         - value
         - ``*{#my-element-id > span}``
+        - Find multiple elements by selector, actions will be executed on all elements
     *   - element_xpath
         - value
         - ``[//*[@id="btn-1"]]``
+        - Find a single element by xpath
     *   - elements_xpath
         - value
         - ``*[//div[@id="container"]/span]``
+        - Find multiple elements by xpath.
     *   - element_prop
         - value
         - ``#my-input.value``
+        - A property of an element to use in comparisons.
     *   - eq
         - comparison
         - ``#my-input.value should be 1``
+        - Equality comparison
     *   - lt
         - comparison
         - ``#my-input.value < 3``
+        - The value should be less than.
     *   - lte
         - comparison
         - ``#my-input.value <= 3``
+        -  The value on the left should be less or equal to.
     *   - gt
         - comparison
         - ``#my-input.value > 3``
+        - Value should be greater.
     *   - gte
         - comparison
         - ``#my-input.value >= 3``
+        - Greater or equal comparison.
     *   - text_equal
         - comparison
         - ``text in #output should be "Foo bar"``
+        - Special comparison for text attribute, it uses the ``wait_for`` api.
     *   - prop_compare
         - comparison
         - ``#output.value should be 3``
+        - Property comparison uses the ``wait_for`` api
     *   - style_compare
         - comparison
         - ``style "padding" of #btn should be "3px"``
+        - ``wait_for`` comparison for a style attribute of an element.
     *   - clear
         - command
         - ``clear #my-input``
+        - Clear the value of an element.
     *   - click
         - command
         - ``click #my-btn``
+        - Click on an element, the element must be visible to be clickable.
     *   - send_value
         - command
         - ``enter "Foo bar" in #my-input``
+        - Send keyboard input to an element.
 
 .. note:: The syntax can be extended with :ref:`hooks`.
 
