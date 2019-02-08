@@ -47,10 +47,10 @@ elements_length: elements ".length"
 
 // Comparisons
 ?eq: "should be"i | "eq" | "=="
-?lt: "less than"i | "lt"i | "<"
-?lte: "less or equal than"i | "lte"i | "<="
-?gt: "greater than"i | "gt"i | ">"
-?gte: "greater or equal than"i | "gte"i | ">="
+?lt: "should be less than"i | "lt"i | "<"
+?lte: "should be less or equal than"i | "lte"i | "<="
+?gt: "should be greater than"i | "gt"i | ">"
+?gte: "should be greater or equal than"i | "gte"i | ">="
 
 ?comparison: eq | lt | lte | gt | gte
 
