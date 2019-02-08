@@ -1,4 +1,7 @@
-"""Run dash applications in a thread or subprocess."""
+"""
+Run dash applications with a context manager.
+When exiting the context, the server will close.
+"""
 import runpy
 import shlex
 import subprocess
@@ -38,7 +41,7 @@ def import_app(app_file):
     The import path is in dot notation to the module.
     The variable named app will be returned.
 
-    *Example*
+    :Example:
 
         >>> app = import_app('my_app.app')
 
@@ -135,10 +138,16 @@ class DashThreaded(BaseDashRunner):
         """
         Start the threaded dash app server.
 
+        .. seealso:: :py:func:`~.plugin.dash_threaded`
+
         :param app: The dash application instance.
+        :type app: dash.Dash
         :param port: Port of the dash application.
+        :type port: int
         :param start_wait_time: Poll rate for the server started wait
+        :type start_wait_time: float
         :param start_timeout: Max time to start the server.
+        :type start_timeout: float
         :param kwargs:
         :return:
         """
@@ -185,9 +194,14 @@ class DashSubprocess(BaseDashRunner):
         """
         Start the waitress-serve process.
 
-        :param app_module: Dot notation path to the app file
+        .. seealso:: :py:func:`~.plugin.dash_subprocess`
+
+        :param app_module: Dot notation path to the app file.
+        :type app_module: str
         :param server_instance: Variable name of the flask instance.
+        :type server_instance: str
         :param port: Port to serve the application.
+        :type port: int
         :return:
         """
         server_path = '{}:{}'.format(app_module, server_instance)
