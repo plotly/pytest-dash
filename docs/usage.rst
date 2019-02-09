@@ -169,7 +169,7 @@ There is 3 kind of rule for the grammar:
     *   - elements_selector
         - value
         - ``*{#my-element-id > span}``
-        - Find multiple elements by selector, actions will be executed on all elements
+        - Find multiple elements by selector, actions will be executed on all elements (Currently click & length assertions)
     *   - element_xpath
         - value
         - ``[//*[@id="btn-1"]]``
