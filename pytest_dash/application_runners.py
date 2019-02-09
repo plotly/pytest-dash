@@ -29,7 +29,7 @@ def _stop_server():
 def _assert_closed(driver):
     driver.refresh()
     body = driver.find_element_by_css_selector('body').text
-    return 'This site can’t be reached' in body
+    return 'refused to connect' in body
 
 
 def _handle_error(_):
