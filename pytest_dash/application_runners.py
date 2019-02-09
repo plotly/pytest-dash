@@ -13,6 +13,7 @@ import sys
 import flask
 import requests
 
+from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.support.wait import WebDriverWait
 
 from pytest_dash import errors
@@ -107,8 +108,8 @@ class BaseDashRunner:
         if self.started and not self.keep_open:
             self.stop()
             try:
-                WebDriverWait(self.driver, 10).until(_assert_closed)
-            except TimeoutError:
+                WebDriverWait(self.driver, 1).until(_assert_closed)
+            except TimeoutException:
                 raise errors.ServerCloseError(
                     'Could not stop server (port={})'.format(self.port)
                 )
