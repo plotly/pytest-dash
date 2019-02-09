@@ -71,3 +71,20 @@ def test_subprocess(dash_subprocess):
     value_input.send_keys('Hello dash subprocess')
 
     wait_for_text_to_equal(driver, '#out', 'Hello dash subprocess')
+
+
+def test_different_application_name_imported(dash_threaded):
+    app = import_app(
+        'test_apps.different_app_name',
+        application_name='different'
+    )
+    dash_threaded(app)
+    wait_for_text_to_equal(dash_threaded.driver, '#body', 'Different')
+
+
+def test_different_application_name_subprocess(dash_subprocess):
+    dash_subprocess(
+        'test_apps.different_app_name',
+        application_name='different'
+    )
+    wait_for_text_to_equal(dash_subprocess.driver, '#body', 'Different')
