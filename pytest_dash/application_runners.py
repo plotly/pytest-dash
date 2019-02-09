@@ -35,7 +35,7 @@ def _handle_error(_):
     _stop_server()
 
 
-def import_app(app_file):
+def import_app(app_file, application_name='app'):
     """
     Import a dash application from a module.
     The import path is in dot notation to the module.
@@ -49,13 +49,14 @@ def import_app(app_file):
 
     :param app_file: Path to the app (dot-separated).
     :type app_file: str
+    :param application_name: The name of the dash application instance.
     :raise: pytest_dash.errors.NoAppFoundError
     :return: App from module.
     :rtype: dash.Dash
     """
     try:
         app_module = runpy.run_module(app_file)
-        app = app_module['app']
+        app = app_module[application_name]
     except KeyError:
         raise errors.NoAppFoundError(
             'No dash `app` instance was found in {}'.format(app_file)
