@@ -68,7 +68,7 @@ class DashBehaviorTestItem(pytest.Item):
         app_options = application.get('options', {})
         app_port = app_options.get('port', 8050)
         events = self.spec.get('event')
-        outcomes = self.spec.get('outcome')
+        outcomes = self.spec.get('outcome', [])
         parameters = self.spec.get('parameters', {})
         variables = {
             k: self.parameters.get(k, v.get('default'))
