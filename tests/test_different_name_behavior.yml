@@ -1,0 +1,9 @@
+DifferentNameScenario:
+  application:
+    path: test_apps.different_app_name
+    application_name: different
+  event:
+    - 'text in #body should be "Different"'
+
+Tests:
+  - DifferentNameScenario
