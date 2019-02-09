@@ -190,7 +190,7 @@ class DashSubprocess(BaseDashRunner):
         self.process = None
 
     # pylint: disable=arguments-differ
-    def start(self, app_module, server_instance='app.server', port=8050):
+    def start(self, app_module, application_name='app', port=8050):
         """
         Start the waitress-serve process.
 
@@ -198,13 +198,13 @@ class DashSubprocess(BaseDashRunner):
 
         :param app_module: Dot notation path to the app file.
         :type app_module: str
-        :param server_instance: Variable name of the flask instance.
-        :type server_instance: str
+        :param application_name: Variable name of the dash instance.
+        :type application_name: str
         :param port: Port to serve the application.
         :type port: int
         :return:
         """
-        server_path = '{}:{}'.format(app_module, server_instance)
+        server_path = '{}:{}.server'.format(app_module, application_name)
         self.port = port
 
         is_windows = sys.platform == 'win32'
