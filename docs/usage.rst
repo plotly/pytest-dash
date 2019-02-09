@@ -184,23 +184,23 @@ There is 3 kind of rule for the grammar:
         - A property of an element to use in comparisons.
     *   - eq
         - comparison
-        - ``#my-input.value should be 1``
+        - ``#my-input.value should be 1``, ``#my-input.value == 1``
         - Equality comparison
     *   - lt
         - comparison
-        - ``#my-input.value < 3``
+        - ``#my-input.value < 3``, ``#my-input.value should be less than 3``
         - The value should be less than.
     *   - lte
         - comparison
-        - ``#my-input.value <= 3``
+        - ``#my-input.value <= 3``,``#my-input.value should be less or equal than 3``
         -  The value on the left should be less or equal to.
     *   - gt
         - comparison
-        - ``#my-input.value > 3``
+        - ``#my-input.value > 3``, ``#my-input.value should be greater than 3``
         - Value should be greater.
     *   - gte
         - comparison
-        - ``#my-input.value >= 3``
+        - ``#my-input.value >= 3``, ``#my-input.value should be greater or equal than 3``
         - Greater or equal comparison.
     *   - text_equal
         - comparison
