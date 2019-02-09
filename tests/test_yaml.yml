@@ -7,8 +7,7 @@ SimpleCallback:
             default: hello world
     application:
         path: test_apps.simple_app
-        options:
-            port: 8051
+        port: 8051
     event:
         - "clear #value"
         - "enter $var1 in #value"

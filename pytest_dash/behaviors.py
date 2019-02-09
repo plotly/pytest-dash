@@ -65,8 +65,8 @@ class DashBehaviorTestItem(pytest.Item):
     def runtest(self):
         application = self.spec.get('application', self._application)
         app_path = application.get('path')
-        app_options = application.get('options', {})
-        app_port = app_options.get('port', 8050)
+        app_port = application.get('port', 8050)
+        app_name = application.get('application_name', 'app')
         events = self.spec.get('event')
         outcomes = self.spec.get('outcome', [])
         parameters = self.spec.get('parameters', {})
@@ -77,7 +77,7 @@ class DashBehaviorTestItem(pytest.Item):
         parser = parser_factory(self.driver, variables, self.plugin.behaviors)
 
         with DashSubprocess(self.driver) as starter:
-            starter(app_path, port=app_port)
+            starter(app_path, port=app_port, application_name=app_name)
             for command in itertools.chain(events, outcomes):
                 parser.parse(command)
 
