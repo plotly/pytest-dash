@@ -22,7 +22,7 @@ Versions follow [Semantic Versioning](https://www.semver.org)
 
 ### Breaking Changes
 #### Removed
-- Removed `pytest-selenium` dependency, now incompatible.
+- Removed `pytest-selenium` dependency, now incompatible, get the driver from the fixtures (eg: `dash_threaded.driver`).
 - Removed `percy_snapshot` fixture.
 
 #### Moved
