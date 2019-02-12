@@ -2,7 +2,7 @@
 
 Versions follow [Semantic Versioning](https://www.semver.org)
 
-## [2.0.0] UNRELEASED
+## [2.0.0] - 2019-02-12
 ### Added
 - Behavior tests from yaml description. [#54](https://github.com/T4rk1n/pytest-dash/pull/54)
 - Plugin configuration hooks for selenium options (Currently only `webdriver`)
