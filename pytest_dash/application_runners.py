@@ -2,6 +2,7 @@
 Run dash applications with a context manager.
 When exiting the context, the server will close.
 """
+from __future__ import print_function
 import runpy
 import shlex
 import subprocess
