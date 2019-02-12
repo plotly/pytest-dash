@@ -155,7 +155,7 @@ class BehaviorTransformerMeta(type):
 # pylint: disable=no-self-use, missing-docstring, no-member, R0904
 @six.add_metaclass(BehaviorTransformerMeta)
 @lark.v_args(inline=True)
-class BehaviorTransformer(lark.Transformer):
+class BehaviorTransformer(lark.Transformer, object):
     """Transform and execute behavior commands."""
 
     def __init__(self, driver, variables=None):
