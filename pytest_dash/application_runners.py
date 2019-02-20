@@ -30,7 +30,7 @@ def _stop_server():
 def _assert_closed(driver):
     driver.refresh()
     body = driver.find_element_by_css_selector('body').text
-    return 'refused to connect' in body
+    return 'refused to connect' in body or not body
 
 
 def _handle_error(_):
