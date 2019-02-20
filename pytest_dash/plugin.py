@@ -112,7 +112,13 @@ class DashPlugin(object):
                     )
                 )
 
-            self._driver = _driver_map.get(self._driver_name)()
+            options = {}
+            hooked_options = self.config.hook.pytest_setup_selenium(
+                driver_name=self._driver_name
+            ) or []
+            for opt in hooked_options:
+                options.update(opt)
+            self._driver = _driver_map.get(self._driver_name)(**options)
 
         return self._driver
 
