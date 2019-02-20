@@ -291,6 +291,9 @@ instead of having to enter it on the command line every time you run a test.
 Hooks
 -----
 
+pytest_add_behaviors
+====================
+
 The scenario event/outcome syntax can be extended with
 the :py:func:`~.new_hooks.pytest_add_behaviors` hook.
 
@@ -317,3 +320,24 @@ the :py:func:`~.new_hooks.pytest_add_behaviors` hook.
 .. seealso::
 
     Lark grammar reference https://lark-parser.readthedocs.io/en/latest/grammar/
+
+pytest_setup_selenium
+=====================
+
+If you need to configure the selenium driver used by the plugin, you can use
+the ``pytest_setup_selenium`` hook.
+
+:Example: ``tests/conftest.py``
+
+.. code-block:: python
+    :caption: Run chrome in headless mode.
+
+    from selenium.webdriver.chrome.options import Options
+
+
+    def pytest_setup_selenium(driver_name):
+        options = Options()
+        options.headless = True
+        return {
+            'chrome_options': options,
+        }
