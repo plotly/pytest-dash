@@ -2,6 +2,10 @@
 
 Versions follow [Semantic Versioning](https://www.semver.org)
 
+## [2.1.1] - 2019-02-21
+### Fixed
+- Fixed python 2 super call on subclasses of BaseDashRunner [#68](https://github.com/T4rk1n/pytest-dash/pull/66)
+
 ## [2.1.0] - 2019-02-20
 ### Added
 - Add `pytest_setup_selenium` hook [#65](https://github.com/T4rk1n/pytest-dash/pull/65)
