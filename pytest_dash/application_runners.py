@@ -66,7 +66,7 @@ def import_app(app_file, application_name='app'):
     return app
 
 
-class BaseDashRunner:
+class BaseDashRunner(object):
     """Base context manager class for running applications."""
 
     def __init__(self, driver, keep_open=False):
