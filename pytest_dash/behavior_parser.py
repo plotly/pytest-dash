@@ -67,9 +67,6 @@ compare: value comparison value
 ?command: "clear" elemental -> clear
     | "click" elemental -> click
     | "enter" value "in" element -> send_value
-    | "select by value" input_value element -> select_by_value
-    | "select by text" ESCAPED_STRING element -> select_by_text
-    | "select by index" NUMBER element -> select_by_index
     %(commands)%
 
 %import common.CNAME -> NAME
@@ -293,18 +290,6 @@ class BehaviorTransformer(lark.Transformer, object):
         :kind: command
         """
         element.send_keys(value)
-
-    def select_by_value(self, value, element):
-        select = Select(element)
-        select.select_by_value(value)
-
-    def select_by_text(self, text, element):
-        select = Select(element)
-        select.select_by_visible_text(text)
-
-    def select_by_index(self, index, element):
-        select = Select(element)
-        select.select_by_index(index)
 
     def escape_string(self, escaped):
         """
