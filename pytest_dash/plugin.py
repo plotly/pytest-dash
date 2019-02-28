@@ -105,7 +105,7 @@ class DashPlugin(object):
     def driver(self):
         if not self._driver:
             if self._driver_name not in _driver_map:
-                raise InvalidDriverError(
+                raise InvalidDriverError(  # pragma: no cover
                     '{} is not a valid webdriver value.\n'
                     'Valid drivers {}'.format(
                         self._driver_name, _driver_map.keys()
@@ -117,7 +117,7 @@ class DashPlugin(object):
                 driver_name=self._driver_name
             ) or []
             for opt in hooked_options:
-                options.update(opt)
+                options.update(opt)  # pragma: no cover
             self._driver = _driver_map.get(self._driver_name)(**options)
 
         return self._driver
@@ -133,7 +133,7 @@ def pytest_addhooks(pluginmanager):
     from pytest_dash import new_hooks
     method = getattr(pluginmanager, "add_hookspecs", None)
     if method is None:
-        method = pluginmanager.addhooks
+        method = pluginmanager.addhooks  # pragma: no cover
     method(new_hooks)
 
 

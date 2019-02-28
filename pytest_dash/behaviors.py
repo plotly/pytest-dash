@@ -21,7 +21,7 @@ class DashBehaviorTestFile(pytest.File):
         global_application = raw.get('application')
         tests = raw.pop('Tests')
         if not tests:
-            raise errors.PytestDashError(
+            raise errors.PytestDashError(  # pragma: no cover
                 'No tests defined for {}'.format(self.fspath)
             )
 
@@ -40,7 +40,7 @@ class DashBehaviorTestFile(pytest.File):
                 )
 
             if not behavior:
-                raise errors.MissingBehaviorError(
+                raise errors.MissingBehaviorError(  # pragma: no cover
                     'Behavior not found: {}'.format(test_name)
                 )
 

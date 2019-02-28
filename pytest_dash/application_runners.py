@@ -89,7 +89,7 @@ class BaseDashRunner(object):
         :param kwargs:
         :return:
         """
-        raise NotImplementedError
+        raise NotImplementedError  # pragma: no cover
 
     def stop(self):
         """
@@ -97,7 +97,7 @@ class BaseDashRunner(object):
 
         :return:
         """
-        raise NotImplementedError
+        raise NotImplementedError  # pragma: no cover
 
     def __call__(self, *args, **kwargs):
         return self.start(*args, **kwargs)
@@ -110,7 +110,7 @@ class BaseDashRunner(object):
             self.stop()
             try:
                 WebDriverWait(self.driver, 1).until(_assert_closed)
-            except TimeoutException:
+            except TimeoutException:  # pragma: no cover
                 raise errors.ServerCloseError(
                     'Could not stop server (port={})'.format(self.port)
                 )
@@ -244,6 +244,6 @@ class DashSubprocess(BaseDashRunner):
             time.sleep(0.01)
         out, err = self.process.communicate()
         if out:
-            print(out.decode(), file=sys.stderr)
+            print(out.decode(), file=sys.stderr)  # pragma: no cover
         if err:
             print(err.decode(), file=sys.stderr)
