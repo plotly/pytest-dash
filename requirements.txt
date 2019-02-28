@@ -17,3 +17,4 @@ lark-parser
 Flask-Sphinx-Themes
 m2r
 pytest-cov
+codecov
