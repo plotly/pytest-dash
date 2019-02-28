@@ -10,7 +10,10 @@ app = dash.Dash(__name__)
 
 app.layout = html.Div([
     dcc.Input(id='value', placeholder='my-value'),
-    html.Div(['You entered: ', html.Span(id='out')])
+    html.Div(['You entered: ', html.Span(id='out')]),
+    html.Button('style-btn', id='style-btn'),
+    html.Div('style-container', id='style-output'),
+
 ])
 
 
@@ -20,6 +23,14 @@ def on_value(value):
         raise PreventUpdate
 
     return value
+
+
+@app.callback(Output('style-output', 'style'), [Input('style-btn', 'n_clicks')])
+def on_style(value):
+    if value is None:
+        raise PreventUpdate
+
+    return {'padding': '10px'}
 
 
 if __name__ == '__main__':

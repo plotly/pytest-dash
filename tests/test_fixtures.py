@@ -12,7 +12,8 @@ import dash_html_components as html
 
 # pylint: disable=unused-import
 from pytest_dash.wait_for import \
-    wait_for_text_to_equal, wait_for_element_by_css_selector
+    wait_for_text_to_equal, wait_for_element_by_css_selector,\
+    wait_for_style_to_equal, wait_for_property_to_equal
 from pytest_dash.application_runners import import_app
 
 
@@ -70,7 +71,14 @@ def test_subprocess(dash_subprocess):
     value_input.clear()
     value_input.send_keys('Hello dash subprocess')
 
-    wait_for_text_to_equal(driver, '#out', 'Hello dash subprocess')
+    wait_for_property_to_equal(
+        driver, '#value', 'value', 'Hello dash subprocess'
+    )
+
+    btn = wait_for_element_by_css_selector(driver, '#style-btn')
+    btn.click()
+
+    wait_for_style_to_equal(driver, '#style-output', 'padding', '10px')
 
 
 def test_different_application_name_imported(dash_threaded):
