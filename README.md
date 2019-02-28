@@ -4,6 +4,7 @@
 
 [![CircleCI](https://circleci.com/gh/T4rk1n/pytest-dash.svg?style=svg)](https://circleci.com/gh/T4rk1n/pytest-dash)
 [![Documentation Status](https://readthedocs.org/projects/pytest-dash/badge/?version=latest)](https://pytest-dash.readthedocs.io/en/latest/?badge=latest)
+[![codecov](https://codecov.io/gh/T4rk1n/pytest-dash/branch/master/graph/badge.svg)](https://codecov.io/gh/T4rk1n/pytest-dash)
 
 ## Install
 
