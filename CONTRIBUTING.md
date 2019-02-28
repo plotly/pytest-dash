@@ -3,8 +3,15 @@
 ### Getting started
 
 - Fork and clone the repo
+- Create and activate
+```
+$ python -m venv venv
+$ . venv/bin/activate
+```
 - Install the dependencies
 `$ pip install -r requirements.txt`
+- The plugin needs to be installed to run the tests locally
+`$ pip install -e .`
 
 ### Coding style
 
