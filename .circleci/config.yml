@@ -46,7 +46,7 @@ jobs:
           command: |
             . venv/bin/activate
             pip install -e .
-            pytest tests
+            pytest --cov=pytest_dash
 
       - store_artifacts:
           path: test-reports
