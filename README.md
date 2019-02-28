@@ -17,7 +17,7 @@ Install with pip: `$ pip install -U pytest-dash`
 
 ## Documentation
 
-For full documentation and examples, please see https://pytest-dash.readthedocs.io/en/latest/
+For full documentation and examples, please see https://pytest-dash.readthedocs.io/en/latest/usage.html
 
 ## Bugs/Suggestions
 
