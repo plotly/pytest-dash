@@ -3,7 +3,7 @@ import functools
 import six
 
 import lark
-from selenium.webdriver.support.ui import Select, WebDriverWait
+from selenium.webdriver.support.ui import WebDriverWait
 
 from pytest_dash.wait_for import (
     wait_for_element_by_id, wait_for_element_by_css_selector,
