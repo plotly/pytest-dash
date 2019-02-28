@@ -47,6 +47,7 @@ jobs:
             . venv/bin/activate
             pip install -e .
             pytest --cov=pytest_dash
+            cp .coverage test-reports
 
       - store_artifacts:
           path: test-reports
