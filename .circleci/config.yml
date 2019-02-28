@@ -49,6 +49,12 @@ jobs:
             pytest --cov=pytest_dash
             cp .coverage test-reports
 
+      - run:
+          name: Upload coverage
+          command: |
+            . venv/bin/activate
+            codecov
+
       - store_artifacts:
           path: test-reports
           destination: test-reports
