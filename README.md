@@ -4,13 +4,9 @@
 
 [Pytest][2] plugin for [Dash][1]. Pytest-dash aims to ease automated testing of dash applications and components.
 
-[![CircleCI](https://circleci.com/gh/plotly/pytest-dash.svg?style=svg)](https://circleci.com/gh/plotly/pytest-dash)
-[![Documentation Status](https://readthedocs.org/projects/pytest-dash/badge/?version=latest)](https://pytest-dash.readthedocs.io/en/latest/?badge=latest)
-[![codecov](https://codecov.io/gh/T4rk1n/pytest-dash/branch/master/graph/badge.svg)](https://codecov.io/gh/T4rk1n/pytest-dash)
-
 ## DEPRECATED
 
-this repository is deprecated and we are in the process of merging part of the features (test fixtures) into main [dash repo](https://github.com/plotly/dash). 
+This repository is no longer maintained and its functionality has been merged into the main [dash repo](https://github.com/plotly/dash) as `dash.testing`. Documentation: https://dash.plotly.com/testing
 
 ## Install
 
@@ -26,13 +22,9 @@ Install with pip: `$ pip install -U pytest-dash`
 
 For full documentation and examples, please see https://pytest-dash.readthedocs.io/en/latest/usage.html
 
-## Bugs/Suggestions
-
-For any bug, suggestion or request, please open a [GitHub issue](https://github.com/plotly/pytest-dash/issues).
-
 ## More resources
 
-- [Dash user guide](https://dash.plot.ly/)
+- [Dash user guide](https://dash.plotly.com/)
 - [Pytest][2]
 
 [1]: https://github.com/plotly/dash
