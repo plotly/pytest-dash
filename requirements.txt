@@ -1,4 +1,4 @@
-dash==0.39.0
+dash==2.15.0
 selenium
 pytest
 requests
